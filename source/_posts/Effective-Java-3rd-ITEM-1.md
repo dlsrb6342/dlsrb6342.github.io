@@ -18,7 +18,7 @@ thumbnail:
  method signature - method name + method parameter (return type은 포함되지 않는다.)
 <br/>
 ### 2. 호출될 때마다 인스터스를 새로 생성하지는 않아도 된다.
-```
+```java
 Boolean.valueOf(boolean b) {
     return b ? Boolean.TRUE : Boolean.FALSE;
 }
