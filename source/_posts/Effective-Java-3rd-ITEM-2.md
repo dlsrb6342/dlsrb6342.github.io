@@ -4,7 +4,7 @@ categories:
   - Effective Java 3rd
   - 2. Objects
 tags:
-  - effective-java
+  - effective_java
   - java
 date: 2019-02-24 16:19:37
 thumbnail:
