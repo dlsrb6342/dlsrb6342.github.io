@@ -88,13 +88,12 @@ deploy:
 # For tranquilpeak
 feed:
     type: atom
-    path: atom.xml
+    path: feed.xml
     limit: 20
 
 # For Algolia
 plugins:
   - hexo-server
-  - hexo-algoliasearch
   - hexo-generator-archive
   - hexo-generator-category
   - hexo-generator-feed
@@ -105,17 +104,12 @@ plugins:
   - hexo-renderer-marked
   - hexo-renderer-stylus
   - hexo-deployer-git
- 
-algolia:
-  appId: "Z2DTNS0IL1"
-  apiKey: "ac955eddfbf8122a93ee9945e841d502"
-  adminApiKey: "9687bc9ef3d39bd141828fd13a8d370a"
-  chunkSize: 5000
-  indexName: "dlsrb6342.github.io"
-  fields:
-    - content:strip:truncate,0,500
-    - excerpt:strip
-    - permalink
-    - categories
-    - tags
-    - title
+  - hexo-autonofollow
+  - hexo-auto-canonical
+  - hexo-generator-seo-friendly-sitemap
+
+nofollow:
+    enable: true
+
+sitemap:
+    path: sitemap.xml
