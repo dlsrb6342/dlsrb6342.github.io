@@ -81,6 +81,8 @@ theme: tranquilpeak
 deploy:
   type: git
   repo: https://github.com/dlsrb6342/dlsrb6342.github.io.git
+  name: dlsrb6342
+  email: dlsrb6342@gmail.com
 
 
 # For tranquilpeak
