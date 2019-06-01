@@ -1,0 +1,58 @@
+nav:
+  Home: /home/
+  About: /about/
+  Writing: /archives/
+  Category: /all-categories/
+  Projects: http://github.com/dlsrb6342
+
+projects_url: http://github.com/dlsrb6342
+
+customize:
+    gravatar:
+        email: 
+    logo:
+        enabled: true
+        width: 50
+        height: 50
+        url: /images/logo.png
+        gravatar: false
+    favicon: 
+      # eg. generate with http://realfavicongenerator.net/
+      desktop:
+        url: /images/favicon.ico
+        gravatar: false
+      android:
+        url: /images/favicon-192x192.png
+        gravator: false
+      apple:
+        url: /images/apple-touch-icon.png
+        gravator: false
+    social_links:
+        github: https://github.com/dlsrb6342
+        linkedin: https://www.linkedin.com/in/ingyu-hwang-799326149/
+    post_count: 5
+    highlight: lightcode
+
+# keept it like this to add the root path (probably a bug)
+root: ..
+
+solar:
+    # factor between 0 (fast), 1(normal), 2(very slow)  
+    speed: 1
+    sun_image: /images/face.png
+
+# RSS
+rss: false
+
+# Plugins
+plugins:
+    disqus_shortname: ododododo
+    google_analytics: UA-139343775-1
+
+# Miscellaneous
+miscellaneous:
+    open_graph: # see http://ogp.me
+        fb_app_id:
+        fb_admins:
+        twitter_id:
+        google_plus:

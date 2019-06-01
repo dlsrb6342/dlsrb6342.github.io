@@ -1,5 +1,5 @@
 ---
-title: Effective Java 3rd. ITEM 3.
+title: Effective Java 3rd ITEM 3
 categories:
   - Effective Java 3rd
   - 2. Objects

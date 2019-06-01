@@ -1,5 +1,5 @@
 ---
-title: Effective Java 3rd ITEM17
+title: Effective Java 3rd ITEM 17
 categories:
   - Effective Java 3rd
   - 4. Classes and Interfaces
