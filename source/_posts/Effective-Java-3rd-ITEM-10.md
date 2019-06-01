@@ -1,7 +1,7 @@
 ---
 title: Effective Java 3rd ITEM 10
 categories:
-  - Effective java 3rd
+  - Effective Java 3rd
   - 3. Methods Common to All Objects
 tags:
   - effective_java
