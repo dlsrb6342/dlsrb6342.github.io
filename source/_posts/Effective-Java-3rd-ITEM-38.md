@@ -2,7 +2,7 @@
 title: Effective Java 3rd ITEM 38
 categories:
   - Effective Java 3rd
-  - 5. Enums and Annotations
+  - 6. Enums and Annotations
 tags:
   - effective_java
   - java
