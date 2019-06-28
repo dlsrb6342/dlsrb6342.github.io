@@ -20,7 +20,7 @@ spring-cloud-gateway를 사용하면서 Dynamic Properties를 사용하고 싶�
 이런 상황을 위해 [spring-cloud-bus](https://cloud.spring.io/spring-cloud-bus/spring-cloud-bus.html)가 있다. mq를 써서 각 인스턴스마다 refresh 이벤트를 전달해준다.
 > https://www.baeldung.com/spring-cloud-bus
 
-***하지만 spring-cloud-bus까지 도입하기에는 운영해야할 것들이 너무 많이 늘어나게 된다.***
+***하지만 spring-cloud-bus까지 도입하자니 운영해야할 것들이 너무 많이 늘어나게 된다.***
 
 ### 2. ConfigClientWatch
 이전 프로젝트에서 Dynamic Properties를 위해 [CentralDogma](https://line.github.io/centraldogma/)를 사용한 적이 있다. CentralDogma에는 Watcher 구현체가 있어서 spring-cloud-config-client에도 있지 않을까?하는 생각에 코드를 뒤져봤다. 
@@ -38,7 +38,7 @@ if (stateChanged(oldState, newState)) {
 	this.refresher.refresh();
 }
 ```
-내부 로직을 보면 ConfigClientWatch는 `config.client.state` 값을 보고 변경되었는지 체크한다. 하지만 이 state 값은 [Vault](https://www.vaultproject.io/)를 Backend로 사용했을 때만 존재한다...
+내부 로직을 보면 ConfigClientWatch는 `config.client.state` 값을 보고 변경되었는지 체크한다. 하지만 이 state 값은 [Vault](https://www.vaultproject.io/)를 Backend로 사용했을 때만 존재한다.
 
 ***따라서 git을 Backend로 사용하고 있는 난 사용할 수 없었다.***
 
