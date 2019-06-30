@@ -1,9 +1,12 @@
 ---
 title: spring-cloud-gateway Custom Filter
 categories:
-  - null
+  - spring-cloud
+  - spring-cloud-gateway
 tags:
-  - null
+  - spring
+  - spring-cloud
+  - java
 date: 2019-06-30 23:01:11
 thumbnail:
 ---
