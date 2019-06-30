@@ -108,6 +108,7 @@ plugins:
   - hexo-auto-canonical
   - hexo-generator-seo-friendly-sitemap
   - hexo-pagination
+  - hexo-generator-robotstxt
 
 archive_generator:
   enabled: true
@@ -122,3 +123,9 @@ nofollow:
 
 sitemap:
     path: sitemap.xml
+
+robotstxt:
+  allow: 
+    - /
+  sitemap: /sitemap.xml
+
