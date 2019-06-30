@@ -10,7 +10,7 @@ date: 2019-06-30 17:18:05
 thumbnail:
 ---
 
-# ITEM 54. Use varargs judiciously
+# ITEM 53. Use varargs judiciously
 
 가변인수 메서드는 인수를 0개 이상 받을 수 있는 메서드이다. 인수들을 배열에 저장하여 메서드에 전달해준다. 
 
