@@ -14,7 +14,7 @@ thumbnail:
 요구사항은 간단하다. Request body와 Response body를 로깅하는 것이다. 생각보다 간단했다.
 
 ## Servlet Wrapper
-기본적으로 RequestPacade / ResponsePacade로 SevletRequest / ServletResponse가 들어온다. 이를 Content Caching Wrapper로 감싸주기만 하면 된다.
+spring boot에서는 기본적으로 [RequestPacade](https://tomcat.apache.org/tomcat-9.0-doc/api/org/apache/catalina/connector/RequestFacade.html) / [ResponsePacade](https://tomcat.apache.org/tomcat-9.0-doc/api/org/apache/catalina/connector/ResponseFacade.html)로 SevletRequest / ServletResponse가 들어온다. 이를 Content Caching Wrapper로 감싸주기만 하면 된다.
 
 spring-web에 이미 [ContentCachingRequestWrapper](https://github.com/spring-projects/spring-framework/blob/master/spring-web/src/main/java/org/springframework/web/util/ContentCachingRequestWrapper.java)와 [ContentCachingResponseWrapper](https://github.com/spring-projects/spring-framework/blob/master/spring-web/src/main/java/org/springframework/web/util/ContentCachingResponseWrapper.java)가 구현되어있다. 
 물론 원하는대로 직접 구현해도 되지만 spring이 예쁘게 구현해두었으니 활용해보자.
