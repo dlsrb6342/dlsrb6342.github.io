@@ -98,6 +98,6 @@ public class CustomGatewayFilterFactory
 사실 난 처음엔 `OrderedGatewayFilter`의 존재를 몰랐고 왜 GatewayFilterFactory의 Order를 받지 않는지 의문이 생겼었다. 그래서 spring-cloud-gateway에 [issue](https://github.com/spring-cloud/spring-cloud-gateway/issues/1122)를 남겼었다. 올리고나서 OrderedGatewayFilter를 발견했고 코멘트로도 이것을 사용하라는 가이드를 받았다.
 
 ## Sample Source Code
-https://github.com/dlsrb6342/spring-cloud-gateway-custom-filter
+https://github.com/dlsrb6342/blog-sample/tree/master/spring-cloud-gateway-custom-filter
 ShortCut field와 OrderedGatewayFilter를 사용한 sample custom filter code이다. 가장 높은 우선순위를 준 filter가 설정에 상관없이 항상 먼저 실행되는 것을 확인할 수 있을 것이다.
 

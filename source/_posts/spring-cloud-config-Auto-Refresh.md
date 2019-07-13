@@ -131,5 +131,5 @@ Default Backend를 git으로 사용하고 있는데 Git Watch가 없는게 이�
 혹시 Git Watch가 필요하다 생각되신 분들은 이슈에 ThumbsUp 버튼 한번씩 클릭해주시면 감사하겠습니다 ㅎㅎ
 
 ## Source Code
-https://github.com/dlsrb6342/spring-cloud-config-auto-refresh
+https://github.com/dlsrb6342/blog-sample/tree/master/spring-cloud-config-auto-refresh
 위 레포에 올려두었다. gradle 멀티모듈로 server/client를 만들고 config server는 같은 레포를 바라보고 있지만 config client가 label을 config로 지정하여 config branch를 볼 수 있게 하였다.

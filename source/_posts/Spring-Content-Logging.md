@@ -73,7 +73,7 @@ caching된 content는 byte array로 들고 있기 때문에 objectMapper를 이�
 
 ## Test
 
-Sample code는 https://github.com/dlsrb6342/spring-content-caching-sample 에서 확인할 수 있다.
+Sample code는 https://github.com/dlsrb6342/blog-sample/tree/master/spring-content-caching 에서 확인할 수 있다.
 아래 예시와 같이 request body / response body logging을 할 수 있다. 
 ```
 // request
