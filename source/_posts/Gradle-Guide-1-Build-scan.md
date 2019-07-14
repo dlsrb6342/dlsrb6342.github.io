@@ -34,7 +34,9 @@ JVM:          12.0.1 (Azul Systems, Inc. 12.0.1+12)
 OS:           Mac OS X 10.14.4 x86_64
 ```
 
-# Gradle Guide 1. [Creating Build Scans](https://guides.gradle.org/creating-build-scans/)
+# Gradle Guide 1. Creating Build Scans
+> 공식 가이드 : https://guides.gradle.org/creating-build-scans/
+
 1번부터 처음보는 것이다. 여태까지 정말 막 써 왔구나를 느낀다. 
 
 이 가이드에서는 별다른 수정이나 설정없이 build scan ad-hoc을 적용하는 방법에 대해 배운다.
