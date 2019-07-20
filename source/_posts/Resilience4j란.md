@@ -13,9 +13,17 @@ thumbnail:
 
 > Resilience4j is a lightweight, easy-to-use fault tolerance library inspired by Netflix Hystrix. 
  
-Hystrix는 다른 dependency를 많이 가진 archaius를 사용했지만 Resilience4j는 Vavr를 제외한 다른 library dependancy가 없다.
+Resilience4j는 Hystrix로부터 영감을 받은 fault tolerance library다. 사용하기 가볍고 다른 라이브러리 의존성이 없어 좋다. Hystrix는 다른 dependency를 많이 가지고도 있고 archaius라는 큰 라이브러리를 사용했지만 Resilience4j는 Vavr를 제외한 다른 library dependancy가 없다. 
+Resilience4j에는 Circuit Breaker / Rate Limier / Bulkhead / Retry / Cache / Time Limiter 구현체들이 있다. 각각의 개념에 관해서는 아래 주제 별로 붙어있는 링크에서 확인할 수 있다. 이번 글에서는 코어 모듈에 대한 내용을 다루겠다.
 
-## Netflix Hystrix와 다른점
+## resilience4j-circuitbreaker
+https://martinfowler.com/bliki/CircuitBreaker.html
+
+### Netflix Hystrix와 다른점
+> Hystrix is no longer in active development, and is currently in maintenance mode.
+For the cases where something like Hystrix makes sense, we intend to continue using Hystrix for existing applications, and to leverage open and active projects like resilience4j for new internal projects. We are beginning to recommend others do the same.
+
+[Hystrix의 github](https://github.com/Netflix/Hystrix)에 가보면 README에 위와 같은 내용이 적혀있다. 이제 더 이상 개발되지 않고 maintenance만 하겠다고 되어있고 resilience4j를 사용하기를 추천하고 있다. 그래서 Netflix에서 왜 resilience4j를 추천하는지 그 둘의 차이점을 찾아보았다. 
 * Hystrix는 외부 API 요청을 HystrixCommand로 wrapping해서 사용해야 한다. 하지만 Resilience4j는 functional interface, lambda, method reference를 위한 higher-order functions(decorator)를 제공한다.   
 > 어떤 decorator를 사용할지 혹은 사용하지 않을지 선택할 수 있게 된다.
 
@@ -25,8 +33,6 @@ Hystrix는 다른 dependency를 많이 가진 archaius를 사용했지만 Resili
 * Hystrix는 CircuitBreaker가 half-open 상태일때 Circuit을 close할지 결정할 딱 한번의 요청을 수행한다. 하지만 Resilience4j는 요청의 수행 횟수와 threshold 값을 설정할 수 있다.
 * RxJava operators를 지원한다.
 
-## resilience4j-circuitbreaker
-https://martinfowler.com/bliki/CircuitBreaker.html
 ### CircuitBreakerRegistry
 * CircuitBreaker instance를 만들고 없애는 관리를 할 수 있는 class이다.
 * 기본적으로 ConcurrentHashMap을 활용한 in-memory CircuitBreakerRegistry를 제공한다.
