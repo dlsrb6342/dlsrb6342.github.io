@@ -50,7 +50,7 @@ spring-cloud-sleuth 2.0.0 version부터는 tracing instrumentation library인 [B
 
 
 ## Example
-이제 spring-cloud-sleuth를 실제로 사용해보면서 공부해보겠다. 예시 코드는 https://github.com/dlsrb6342/sleuth-example에 올라가있다. 예시는 spring-webflux를 사용해서 만들려고 했지만 제대로 동작하질 않아서 힘들었다. 이틀정도 고생하면서 내가 뭘 잘못해서 안되는지 찾아봤다. 결론은 내 잘못은 아닌것으로 보인다. [spring-cloud-sleuth 이슈](https://github.com/spring-cloud/spring-cloud-sleuth/issues/1402)로 등록해두었다. 아직 답변은 못 받았지만 버그인 것 같다. 예시 코드는 일단 webflux와 mvc 두개 모두 만들어두었다.
+이제 spring-cloud-sleuth를 실제로 사용해보면서 공부해보겠다. 예시 코드는 https://github.com/dlsrb6342/blog-sample/tree/master/spring-cloud-sleuth-example에 올라가있다. 예시는 spring-webflux를 사용해서 만들려고 했지만 제대로 동작하질 않아서 힘들었다. 이틀정도 고생하면서 내가 뭘 잘못해서 안되는지 찾아봤다. 결론은 내 잘못은 아닌것으로 보인다. [spring-cloud-sleuth 이슈](https://github.com/spring-cloud/spring-cloud-sleuth/issues/1402)로 등록해두었다. 아직 답변은 못 받았지만 버그인 것 같다. 예시 코드는 일단 webflux와 mvc 두개 모두 만들어두었다.
 
 예시 코드의 구조는 간단하다. 4가지 application(fcaller, fclient, mcaller, mclient)을 만들고 모두 sleuth를 적용시켜두었다. zipkin 서버는 간단하게 docker에 띄우고 실행했다. http://localhost:9411에 접근해보면 zipkin ui를 볼 수 있을 것이다.
 ```console
