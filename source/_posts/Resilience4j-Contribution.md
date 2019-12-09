@@ -1,5 +1,5 @@
 ---
-title: 오픈소스 Contribution의 시작(Resilience4j Maintainer가 되기까지)
+title: 오픈소스 Contribution의 시작(Resilience4j Contribution)
 categories:
   - resilience4j
 tags:
