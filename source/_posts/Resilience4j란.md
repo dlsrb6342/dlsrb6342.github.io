@@ -11,6 +11,7 @@ thumbnail:
 
 > **이 글은 resilience4j 0.17.0 버전으로 작성되었다. 버전이 많이 올라감에 따라 많은 부분이 변경되었으므로 이 글보다는 아래 링크의 글들을 참고하는 것이 좋다.**
 > * **https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker : resilience4j-circuitbreaker 1.2.0 버전에 맞춰 작성된 글이다.**
+> * **https://dlsrb6342.github.io/2019/12/12/Resilience4j-RateLimiter : resilience4j-ratelimiter 1.2.0 버전에 맞춰 작성된 글이다.**
 
 # Resilience4j
 
