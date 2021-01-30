@@ -82,6 +82,7 @@ deploy:
   type: git
   repo: git@github.com:dlsrb6342/dlsrb6342.github.io.git
   token: $GITHUB_TOKEN
+  branch: gh-pages
   name: dlsrb6342
   email: dlsrb6342@gmail.com
 
