@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="ITEM 47. Prefer Collection to Stream as a return typeStream 인터페이스는 Iterable 인터페이스를 확장하지 않았기 때문에 for-each 문에서 사용할 수 없다.모든 API에서 Collection을 리턴한다면 Stream으로 짜려는 클라이언트가 불편하게 된다.&#x3D;&gt; 스트림에서만 사용한다면 Stream&#x3D;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Java 3rd ITEM 47">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="ITEM 47. Prefer Collection to Stream as a return typeStream 인터페이스는 Iterable 인터페이스를 확장하지 않았기 때문에 for-each 문에서 사용할 수 없다.모든 API에서 Collection을 리턴한다면 Stream으로 짜려는 클라이언트가 불편하게 된다.&#x3D;&gt; 스트림에서만 사용한다면 Stream&#x3D;&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-06-25T11:58:26.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.158Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="effective_java">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Effective Java 3rd ITEM 47</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/06/26/Effective-Java-3rd-ITEM-48/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/06/25/Effective-Java-3rd-ITEM-46/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&text=Effective Java 3rd ITEM 47"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&is_video=false&description=Effective Java 3rd ITEM 47"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 47&body=Check out this article: https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&name=Effective Java 3rd ITEM 47&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-47-Prefer-Collection-to-Stream-as-a-return-type"><span class="toc-number">1.</span> <span class="toc-text">ITEM 47. Prefer Collection to Stream as a return type</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%96%B4%EB%8C%91%ED%84%B0-%EC%82%AC%EC%9A%A9"><span class="toc-number">1.1.</span> <span class="toc-text">어댑터 사용</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Collection-return"><span class="toc-number">1.2.</span> <span class="toc-text">Collection return</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Effective Java 3rd ITEM 47
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-06-25T11:58:26.000Z" itemprop="datePublished">2019-06-25</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/effective-java/" rel="tag">effective_java</a>, <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="ITEM-47-Prefer-Collection-to-Stream-as-a-return-type"><a href="#ITEM-47-Prefer-Collection-to-Stream-as-a-return-type" class="headerlink" title="ITEM 47. Prefer Collection to Stream as a return type"></a>ITEM 47. Prefer Collection to Stream as a return type</h1><p>Stream 인터페이스는 Iterable 인터페이스를 확장하지 않았기 때문에 for-each 문에서 사용할 수 없다.<br>모든 API에서 Collection을 리턴한다면 Stream으로 짜려는 클라이언트가 불편하게 된다.<br><strong><em>=&gt; 스트림에서만 사용한다면 Stream</em></strong><br><strong><em>=&gt; 반복문 사용이 필요하다면 Iterable</em></strong><br><strong><em>=&gt; 둘다 지원해야 한다면 Collection을 재정의!</em></strong></p>
+<h2 id="어댑터-사용"><a href="#어댑터-사용" class="headerlink" title="어댑터 사용"></a>어댑터 사용</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// stream -&gt; iterable</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;E&gt; <span class="function">Iterable&lt;E&gt; <span class="title">iterableOf</span><span class="params">(Stream&lt;E&gt; stream)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> stream::iterator;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// iterable -&gt; stream</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;E&gt; <span class="function">Stream&lt;E&gt; <span class="title">streamOf</span><span class="params">(Iterable&lt;E&gt; iterable)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> StreamSupport.stream(iterable.spliterator(), <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>한가지 return type으로 정해져 있다면 클라이언트는 위 두가지 어댑터를 사용해야 한다.</p>
+<h2 id="Collection-return"><a href="#Collection-return" class="headerlink" title="Collection return"></a>Collection return</h2><p>컬렉션은 Iterable의 하위 타입이며 stream 메서드도 제공하기 때문에 두 요구사항을 모두 충족할 수 있다.<br>반환할 시퀀스가 덩치가 크지 않다면 ArrayList나 HashSet같은 표준 컬력센 구현체를 쓰는게 최선이다.<br>덩치가 크다면 직접 전용 컬렉션을 구현해 반환하자. 속도면에서도 어댑터 사용보다 전용 컬렉션을 사용하는것이 더 빠르다.<br>전용 컬렉션을 구현해서 사용한 예시이다. 입력 집합의 멱집합을 전용 컬렉션에 담아 반환한다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PowerSet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> &lt;E&gt; Collection&lt;Set&lt;E&gt;&gt; of(Set&lt;E&gt; s) &#123;</span><br><span class="line">        List&lt;E&gt; src = <span class="keyword">new</span> ArrayList&lt;&gt;(s);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (src.size() &gt; <span class="number">30</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Set too big&quot;</span> + s);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AbstractList&lt;Set&lt;E&gt;&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span> &lt;&lt; src.size(); <span class="comment">// 2 to the power srcSize</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> o <span class="keyword">instanceof</span> Set &amp;&amp; src.containsAll((Set)o);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Set&lt;E&gt; <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">                Set&lt;E&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; index != <span class="number">0</span>; i++, index &gt;&gt;=<span class="number">1</span>)</span><br><span class="line">                    <span class="keyword">if</span> ((index &amp; <span class="number">1</span>) == <span class="number">1</span>)</span><br><span class="line">                        result.add(src.get(i));</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-47-Prefer-Collection-to-Stream-as-a-return-type"><span class="toc-number">1.</span> <span class="toc-text">ITEM 47. Prefer Collection to Stream as a return type</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%96%B4%EB%8C%91%ED%84%B0-%EC%82%AC%EC%9A%A9"><span class="toc-number">1.1.</span> <span class="toc-text">어댑터 사용</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Collection-return"><span class="toc-number">1.2.</span> <span class="toc-text">Collection return</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&text=Effective Java 3rd ITEM 47"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&is_video=false&description=Effective Java 3rd ITEM 47"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 47&body=Check out this article: https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&title=Effective Java 3rd ITEM 47"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/06/25/Effective-Java-3rd-ITEM-47/&name=Effective Java 3rd ITEM 47&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

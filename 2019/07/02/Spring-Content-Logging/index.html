@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Spring Content Logging요구사항은 간단하다. Request body와 Response body를 로깅하는 것이다. 생각보다 간단했다. Servlet Wrapperspring boot에서는 기본적으로 RequestPacade &#x2F; ResponsePacade로 SevletRequest &#x2F; ServletResponse가 들어온다. 이를 Conten">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Content Logging">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="Spring Content Logging요구사항은 간단하다. Request body와 Response body를 로깅하는 것이다. 생각보다 간단했다. Servlet Wrapperspring boot에서는 기본적으로 RequestPacade &#x2F; ResponsePacade로 SevletRequest &#x2F; ServletResponse가 들어온다. 이를 Conten">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-07-02T12:55:05.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.265Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="spring">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Spring Content Logging</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/06/30/spring-cloud-gateway-Custom-Filter/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&text=Spring Content Logging"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&is_video=false&description=Spring Content Logging"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring Content Logging&body=Check out this article: https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&name=Spring Content Logging&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring-Content-Logging"><span class="toc-number">1.</span> <span class="toc-text">Spring Content Logging</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Servlet-Wrapper"><span class="toc-number">1.1.</span> <span class="toc-text">Servlet Wrapper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CustomServletWrapperFilter"><span class="toc-number">1.1.1.</span> <span class="toc-text">CustomServletWrapperFilter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LoggingInterceptor"><span class="toc-number">1.1.2.</span> <span class="toc-text">LoggingInterceptor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test"><span class="toc-number">1.2.</span> <span class="toc-text">Test</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Spring Content Logging
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-07-02T12:55:05.000Z" itemprop="datePublished">2019-07-02</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="tag-link-link" href="/tags/spring/" rel="tag">spring</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Spring-Content-Logging"><a href="#Spring-Content-Logging" class="headerlink" title="Spring Content Logging"></a>Spring Content Logging</h1><p>요구사항은 간단하다. Request body와 Response body를 로깅하는 것이다. 생각보다 간단했다.</p>
+<h2 id="Servlet-Wrapper"><a href="#Servlet-Wrapper" class="headerlink" title="Servlet Wrapper"></a>Servlet Wrapper</h2><p>spring boot에서는 기본적으로 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://tomcat.apache.org/tomcat-9.0-doc/api/org/apache/catalina/connector/RequestFacade.html">RequestPacade</a> / <a target="_blank" rel="external nofollow noopener noreferrer" href="https://tomcat.apache.org/tomcat-9.0-doc/api/org/apache/catalina/connector/ResponseFacade.html">ResponsePacade</a>로 SevletRequest / ServletResponse가 들어온다. 이를 Content Caching Wrapper로 감싸주기만 하면 된다.</p>
+<p>spring-web에 이미 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/spring-projects/spring-framework/blob/master/spring-web/src/main/java/org/springframework/web/util/ContentCachingRequestWrapper.java">ContentCachingRequestWrapper</a>와 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/spring-projects/spring-framework/blob/master/spring-web/src/main/java/org/springframework/web/util/ContentCachingResponseWrapper.java">ContentCachingResponseWrapper</a>가 구현되어있다.<br>물론 원하는대로 직접 구현해도 되지만 spring이 예쁘게 구현해두었으니 활용해보자.</p>
+<h3 id="CustomServletWrapperFilter"><a href="#CustomServletWrapperFilter" class="headerlink" title="CustomServletWrapperFilter"></a>CustomServletWrapperFilter</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomServletWrappingFilter</span> <span class="keyword">extends</span> <span class="title">OncePerRequestFilter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doFilterInternal</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">                                    HttpServletResponse response, FilterChain chain)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        ContentCachingRequestWrapper wrappingRequest = <span class="keyword">new</span> ContentCachingRequestWrapper(request);</span><br><span class="line">        ContentCachingResponseWrapper wrappingResponse = <span class="keyword">new</span> ContentCachingResponseWrapper(response);</span><br><span class="line"></span><br><span class="line">        chain.doFilter(wrappingRequest, wrappingResponse);</span><br><span class="line"></span><br><span class="line">        wrappingResponse.copyBodyToResponse();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Servlet을 wrapping해주는 filter를 구현했다. OncePerRequestFilter를 상속받아 한 reuqest당 한번의 실행만 되도록 보장하였다. spring bean으로 등록해두면 Filter 적용은 끝난다.</p>
+<p>가장 중요한 점은 마지막 줄에 있다. <code>wrappingResponse.copyBodyToResponse()</code>로 실제 response body에다가 값을 넣어주어야 한다. 이 코드를 안넣어주면 클라이언트가 아무 응답도 받지 못하게 된다.</p>
+<h3 id="LoggingInterceptor"><a href="#LoggingInterceptor" class="headerlink" title="LoggingInterceptor"></a>LoggingInterceptor</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoggingInterceptor</span> <span class="keyword">extends</span> <span class="title">HandlerInterceptorAdapter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ObjectMapper objectMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterCompletion</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;</span><br><span class="line">        <span class="keyword">final</span> ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;</span><br><span class="line"></span><br><span class="line">        log.info(</span><br><span class="line">                <span class="string">&quot;ReqBody : &#123;&#125; / ResBody : &#123;&#125;&quot;</span>,</span><br><span class="line">                objectMapper.readTree(cachingRequest.getContentAsByteArray()),</span><br><span class="line">                objectMapper.readTree(cachingResponse.getContentAsByteArray())</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>logging은 interceptor로 구현하였다. 이 코드는 간단하게 구현하느라 validation들을 모두 제외하였다. 직접 구현할 때는 wrapping이 안됐을 경우나 caching된 content가 없을 경우 등, 검증해야 할 부분이 많다.<br>caching된 content는 byte array로 들고 있기 때문에 objectMapper를 이용해 JsonNode로 읽어주고 로깅했다. </p>
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><p>Sample code는 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dlsrb6342/blog-sample/tree/master/spring-content-caching">https://github.com/dlsrb6342/blog-sample/tree/master/spring-content-caching</a> 에서 확인할 수 있다.<br>아래 예시와 같이 request body / response body logging을 할 수 있다.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; request</span><br><span class="line">curl -X POST \</span><br><span class="line">  http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;test \</span><br><span class="line">  -H &#39;Content-Type: application&#x2F;json&#39; \</span><br><span class="line">  -d &#39;&#123;</span><br><span class="line">	&quot;foo&quot;: &quot;foo&quot;,</span><br><span class="line">	&quot;bar&quot;: &quot;bar&quot;</span><br><span class="line">&#125;&#39;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; response</span><br><span class="line">&#123;&quot;result&quot;:&quot;test&quot;,&quot;code&quot;:100&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; logging result</span><br><span class="line">2019-07-02 22:44:21.195  INFO 15920 --- [nio-8080-exec-1] c.c.caching.demo.LoggingInterceptor      : ReqBody : &#123;&quot;foo&quot;:&quot;foo&quot;,&quot;bar&quot;:&quot;bar&quot;&#125; &#x2F; ResBody : &#123;&quot;result&quot;:&quot;test&quot;,&quot;code&quot;:100&#125;</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring-Content-Logging"><span class="toc-number">1.</span> <span class="toc-text">Spring Content Logging</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Servlet-Wrapper"><span class="toc-number">1.1.</span> <span class="toc-text">Servlet Wrapper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CustomServletWrapperFilter"><span class="toc-number">1.1.1.</span> <span class="toc-text">CustomServletWrapperFilter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LoggingInterceptor"><span class="toc-number">1.1.2.</span> <span class="toc-text">LoggingInterceptor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test"><span class="toc-number">1.2.</span> <span class="toc-text">Test</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&text=Spring Content Logging"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&is_video=false&description=Spring Content Logging"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring Content Logging&body=Check out this article: https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&title=Spring Content Logging"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/02/Spring-Content-Logging/&name=Spring Content Logging&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

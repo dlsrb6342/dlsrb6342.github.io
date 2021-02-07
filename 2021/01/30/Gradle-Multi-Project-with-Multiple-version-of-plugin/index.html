@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="gradle에서 spring boot dependencies 버전은 org.springframework.boot plugin으로 관리된다. 그런데 plugin의 경우 rootProject에서 버전을 명시해버리면 하위 프로젝트에서 버전을 변경해서 적용할 수 없다. 이 점 때문에 gradle에서 한가지 plugin을 다양한 버전으로 사용하는 것은 조금 불편하다">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gradle Multi Project with Multiple version of plugin">
+<meta property="og:url" content="https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="gradle에서 spring boot dependencies 버전은 org.springframework.boot plugin으로 관리된다. 그런데 plugin의 경우 rootProject에서 버전을 명시해버리면 하위 프로젝트에서 버전을 변경해서 적용할 수 없다. 이 점 때문에 gradle에서 한가지 plugin을 다양한 버전으로 사용하는 것은 조금 불편하다">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-30T06:58:19.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.227Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="gradle">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Gradle Multi Project with Multiple version of plugin</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/02/07/Spring-Cloud-Stream-with-Spring-Cloud-Dataflow/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/01/16/Make-git-branchcut-with-Go-lang/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&text=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&is_video=false&description=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Gradle Multi Project with Multiple version of plugin&body=Check out this article: https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&name=Gradle Multi Project with Multiple version of plugin&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Plugin-Version-in-classpath"><span class="toc-number">1.</span> <span class="toc-text">1. Plugin Version in classpath</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EC%9E%A5%EC%A0%90"><span class="toc-number">1.0.1.</span> <span class="toc-text">장점</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EB%8B%A8%EC%A0%90"><span class="toc-number">1.0.2.</span> <span class="toc-text">단점</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-number">1.0.3.</span> <span class="toc-text">결론</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#2-pluginManagement"><span class="toc-number">2.</span> <span class="toc-text">2. pluginManagement</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0-1"><span class="toc-number">2.0.1.</span> <span class="toc-text">결론</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-gradle-properties%EC%97%90-plugin-%EB%B2%84%EC%A0%84-%EC%84%A0%EC%96%B8"><span class="toc-number">3.</span> <span class="toc-text">3. gradle.properties에 plugin 버전 선언</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EC%9E%A5%EC%A0%90-1"><span class="toc-number">3.0.1.</span> <span class="toc-text">장점</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EB%8B%A8%EC%A0%90-1"><span class="toc-number">3.0.2.</span> <span class="toc-text">단점</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0-2"><span class="toc-number">3.0.3.</span> <span class="toc-text">결론</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">3.1.</span> <span class="toc-text">Reference</span></a></li>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Gradle Multi Project with Multiple version of plugin
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-01-30T06:58:19.000Z" itemprop="datePublished">2021-01-30</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/gradle/" rel="tag">gradle</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>gradle에서 spring boot dependencies 버전은 <code>org.springframework.boot</code> plugin으로 관리된다. 그런데 plugin의 경우 rootProject에서 버전을 명시해버리면 하위 프로젝트에서 버전을 변경해서 적용할 수 없다. 이 점 때문에 gradle에서 한가지 plugin을 다양한 버전으로 사용하는 것은 조금 불편하다..<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.                             # 전체 프로젝트는 2.4.1</span><br><span class="line">├── build.gradle</span><br><span class="line">├── bar</span><br><span class="line">│   └── build.gradle</span><br><span class="line">├── foo</span><br><span class="line">│   └── build.gradle</span><br><span class="line">└── streams                   # streams 이하 모듈은 2.2.7.RELEASE</span><br><span class="line">    ├── build.gradle</span><br><span class="line">    ├── stream-baz</span><br><span class="line">    │   └── build.gradle</span><br><span class="line">    └── stream-qux</span><br><span class="line">        └── build.gradle</span><br></pre></td></tr></table></figure></p>
+<p>이번 새 프로젝트는 특정 모듈에서만 spring boot 버전이 다르게 사용해야 하는 요구사항이 있었다. 위 프로젝트 구조에서 <code>streams</code> 아래 모듈에서만 2.2.7.RELEASE 버전의 spring boot를 사용해야 했다(나중에 글을 쓸 예정이지만 spring-cloud-dataflow를 사용하면서 어쩔 수 없는 상황이었다 ㅠㅠ). 대충 요구사항을 정리해보자면..</p>
+<ol>
+<li>spring-boot 버전은 <code>streams</code>에서는 2.2.7.RELEASE를, 나머지 모듈에서는 2.4.1을 사용한다.</li>
+<li>Library/Plugin의 버전 관리는 하나의 파일에서 혹은 정리된 형태로 보기 쉽게 한다.  </li>
+</ol>
+<p>이 요구사항을 충족시키기 위해 몇가지 방법을 찾고 적용해봤다.</p>
+<h2 id="1-Plugin-Version-in-classpath"><a href="#1-Plugin-Version-in-classpath" class="headerlink" title="1. Plugin Version in classpath"></a>1. Plugin Version in classpath</h2><p>첫 번째 방법은 classpath로 plugin version을 선언해두는 것이다.<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// libraries.gradle</span></span><br><span class="line">ext.version = [</span><br><span class="line">        <span class="symbol">springBoot:</span> <span class="string">&#x27;2.4.1&#x27;</span>,</span><br><span class="line">        ...</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">ext.libraries = [</span><br><span class="line">        <span class="symbol">classpath:</span> [</span><br><span class="line">                <span class="symbol">springBootPlugin:</span> <span class="string">&quot;org.springframework.boot:spring-boot-gradle-plugin:$&#123;ext.version.springBoot&#125;&quot;</span>,</span><br><span class="line">        ],</span><br><span class="line">        <span class="symbol">dependency:</span> [</span><br><span class="line">                ....</span><br><span class="line">        ]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">ext.streamsVersion = [</span><br><span class="line">        <span class="symbol">springBoot:</span> <span class="string">&#x27;2.2.7.RELEASE&#x27;</span>,</span><br><span class="line">        ...</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">ext.streamsLibraries = [</span><br><span class="line">        <span class="symbol">classpath:</span> [</span><br><span class="line">                <span class="symbol">springBootPlugin:</span> <span class="string">&quot;org.springframework.boot:spring-boot-gradle-plugin:$&#123;ext.streamsVersion.springBoot&#125;&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="symbol">dependency:</span> [</span><br><span class="line">                ...</span><br><span class="line">        ]</span><br><span class="line">]</span><br></pre></td></tr></table></figure><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//rootProject build.gradle</span></span><br><span class="line">subprojects &#123;</span><br><span class="line">    apply <span class="attr">from:</span> <span class="string">&quot;$&#123;rootDir&#125;/libraries.gradle&quot;</span></span><br><span class="line"></span><br><span class="line">    buildscript &#123;</span><br><span class="line">        dependencies &#123;</span><br><span class="line">            <span class="keyword">if</span> (project.displayName.contains(<span class="string">&quot;streams&quot;</span>)) &#123;</span><br><span class="line">                classpath <span class="string">&quot;$&#123;project.ext.streamsLibraries.classpath.springBootPlugin&#125;&quot;</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                classpath <span class="string">&quot;$&#123;project.ext.libraries.classpath.springBootPlugin&#125;&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// sub module builld.gradle</span></span><br><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;org.springframework.boot&#x27;</span></span><br></pre></td></tr></table></figure><br>이렇게 선언해놓으면 sub module들에서 plugin을 적용하기만 해도 원하는 버전으로 적용시킬 수 있다. </p>
+<h4 id="장점"><a href="#장점" class="headerlink" title="장점"></a>장점</h4><ul>
+<li><code>libraries.gradle</code>에서 모든 버전 및 라이브러리 관리할 수 있다.</li>
+<li>sub module에서는 버전에 대해 신경쓰지 않고 모든 것을 root project가 관리할 수 있다.</li>
+</ul>
+<h4 id="단점"><a href="#단점" class="headerlink" title="단점"></a>단점</h4><ul>
+<li>plugin 적용 방법이 새로운 형식(<code>plugins &#123; id &#39;ID&#39; &#125;</code>)이 아닌 오래된 형식(<code>apply plugin &#39;ID&#39;</code>)을 사용해야 한다. </li>
+</ul>
+<h4 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h4><p>오래된 형식의 plugin 적용 방법을 사용하고 싶지 않아서 이 방법은 버려졌다. 물론 <code>subproject</code>, <code>allproject</code>에서는 <code>plugins</code>는 사용할 수 없고 <code>apply plugin</code>을 사용해야 한다. (<a target="_blank" rel="external nofollow noopener noreferrer" href="https://stackoverflow.com/a/32353244/7018283">https://stackoverflow.com/a/32353244/7018283</a>)</p>
+<h2 id="2-pluginManagement"><a href="#2-pluginManagement" class="headerlink" title="2. pluginManagement"></a>2. pluginManagement</h2><blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.gradle.org/current/userguide/plugins.html#sec:plugin_management">https://docs.gradle.org/current/userguide/plugins.html#sec:plugin_management</a></p>
+</blockquote>
+<p>gradle에서 plugin 버전을 관리할 수 있는 방법을 공식적으로 지원한다. 그런데 이 방법은 무조건 <code>setting.gradle</code> 파일의 가장 처음에 작성되거나 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.gradle.org/current/userguide/init_scripts.html#init_scripts">init scripts</a> 파일에 작성되어야 한다. </p>
+<h4 id="결론-1"><a href="#결론-1" class="headerlink" title="결론"></a>결론</h4><p>하지만 이 방법으로는 내가 원하는 모듈 별로 서로 다른 버전의 plugin을 적용할 수는 없는 것 같다(할 수 있지만 방법을 못 찾은것일수도..). 만약 전체 프로젝트에서 version을 한가지만 사용하고 있다면 공식적으로 지원하는 방법이니 이걸 택했을 것 같다.</p>
+<h2 id="3-gradle-properties에-plugin-버전-선언"><a href="#3-gradle-properties에-plugin-버전-선언" class="headerlink" title="3. gradle.properties에 plugin 버전 선언"></a>3. <code>gradle.properties</code>에 plugin 버전 선언</h2><p>이 방법은 plugin 버전을 <code>libraries.gradle</code>이 아닌 <code>gradle.properties</code>에 선언하는 방법이다. <code>plugins</code> 블록에서 버전을 변수로써 작성하려면 <code>libraries.gradle</code>에 선언한것은 동작하지 않고 <code>gradle.properties</code>에 선언되어 있어야 동작하기 때문이다. </p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">//</span> <span class="string">gradle.properties</span></span><br><span class="line"><span class="attr">springBootVersion</span>=<span class="string">2.4.1</span></span><br><span class="line"><span class="attr">springBootVersionForStreams</span>=<span class="string">2.2.7.RELEASE</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo/build.gradle</span></span><br><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">&#x27;org.springframework.boot&#x27;</span> version <span class="string">&quot;$&#123;springBootVersion&#125;&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// streams/build.gradle</span></span><br><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">&#x27;org.springframework.boot&#x27;</span> version <span class="string">&quot;$&#123;springBootVersionForStreams&#125;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="장점-1"><a href="#장점-1" class="headerlink" title="장점"></a>장점</h4><ul>
+<li><code>plugins</code> 블록을 사용하여 plugin을 적용할 수 있다. </li>
+<li>버전 관리를 <code>gradle.properties</code>에서 할 수 있다. </li>
+</ul>
+<h4 id="단점-1"><a href="#단점-1" class="headerlink" title="단점"></a>단점</h4><ul>
+<li>각 모듈에서 plugin을 적용할 때 항상 version을 명시해주어야 한다. </li>
+<li>dependencies 관리는 <code>libraries.gradle</code>, plugin 관리는 <code>gradle.properties</code>로 나뉜다. 사실 이 점은 <code>gradle.properties</code>에 모두 맡겨도 된다.</li>
+</ul>
+<h4 id="결론-2"><a href="#결론-2" class="headerlink" title="결론"></a>결론</h4><p><code>plugins</code> 블록을 사용할 수 있다는 점과 버전 관리를 하나의 파일에서 할 수 있다는 점을 이유로 이 방법을 택했다.<br><br></p>
+<hr>
+<p><br><br>항상 maven만 사용해오다가 gradle을 큰 프로젝트에 사용해본 것은 처음이었는데 maven보다 자유도가 높은 느낌이었다. 그렇다보니 유명한 큰 오픈소스 프로젝트를 봐도 제각기 사용하는 방식이 달랐다. 이런 점이 gradle의 장점이기도 하고 단점이기도 한 것 같다.</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://medium.com/@jsuch2362/gradle-dependency-%EB%B6%84%EB%A6%AC%ED%95%98%EA%B8%B0-eb0c7c794b9c">https://medium.com/@jsuch2362/gradle-dependency-%EB%B6%84%EB%A6%AC%ED%95%98%EA%B8%B0-eb0c7c794b9c</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://gradle.org/">https://gradle.org/</a></li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Plugin-Version-in-classpath"><span class="toc-number">1.</span> <span class="toc-text">1. Plugin Version in classpath</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EC%9E%A5%EC%A0%90"><span class="toc-number">1.0.1.</span> <span class="toc-text">장점</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EB%8B%A8%EC%A0%90"><span class="toc-number">1.0.2.</span> <span class="toc-text">단점</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-number">1.0.3.</span> <span class="toc-text">결론</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#2-pluginManagement"><span class="toc-number">2.</span> <span class="toc-text">2. pluginManagement</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0-1"><span class="toc-number">2.0.1.</span> <span class="toc-text">결론</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-gradle-properties%EC%97%90-plugin-%EB%B2%84%EC%A0%84-%EC%84%A0%EC%96%B8"><span class="toc-number">3.</span> <span class="toc-text">3. gradle.properties에 plugin 버전 선언</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EC%9E%A5%EC%A0%90-1"><span class="toc-number">3.0.1.</span> <span class="toc-text">장점</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EB%8B%A8%EC%A0%90-1"><span class="toc-number">3.0.2.</span> <span class="toc-text">단점</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0-2"><span class="toc-number">3.0.3.</span> <span class="toc-text">결론</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">3.1.</span> <span class="toc-text">Reference</span></a></li>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&text=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&is_video=false&description=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Gradle Multi Project with Multiple version of plugin&body=Check out this article: https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&title=Gradle Multi Project with Multiple version of plugin"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/&name=Gradle Multi Project with Multiple version of plugin&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

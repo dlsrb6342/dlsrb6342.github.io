@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Resilience4j CircuitBreakerresilience4j의 CircuitBreaker는 3개의 정상적인 state (CLOSED &#x2F; OPEN &#x2F; HALF_OPEN) 과 2개의 예외 state (DISABLED &#x2F; FORCED_OPEN) 으로 구성된 finite state machine으로 구현되어있다. Sliding Window호출의 결과를">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Resilience4j CircuitBreaker">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="Resilience4j CircuitBreakerresilience4j의 CircuitBreaker는 3개의 정상적인 state (CLOSED &#x2F; OPEN &#x2F; HALF_OPEN) 과 2개의 예외 state (DISABLED &#x2F; FORCED_OPEN) 으로 구성된 finite state machine으로 구현되어있다. Sliding Window호출의 결과를">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-09T14:11:48.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.247Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="resilience4j">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Resilience4j CircuitBreaker</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/12/12/Resilience4j-RateLimiter/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/12/09/Resilience4j-Contribution/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&text=Resilience4j CircuitBreaker"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&is_video=false&description=Resilience4j CircuitBreaker"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Resilience4j CircuitBreaker&body=Check out this article: https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&name=Resilience4j CircuitBreaker&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Resilience4j-CircuitBreaker"><span class="toc-number">1.</span> <span class="toc-text">Resilience4j CircuitBreaker</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Sliding-Window"><span class="toc-number">1.1.</span> <span class="toc-text">Sliding Window</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Count-Based-Sliding-Window"><span class="toc-number">1.1.1.</span> <span class="toc-text">Count Based Sliding Window</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Time-Based-Sliding-Window"><span class="toc-number">1.1.2.</span> <span class="toc-text">Time Based Sliding Window</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Threshold-for-Open-State"><span class="toc-number">1.2.</span> <span class="toc-text">Threshold for Open State</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Failure-Rate-Threshold"><span class="toc-number">1.2.1.</span> <span class="toc-text">Failure Rate Threshold</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Slow-Call-Rate-Threshold"><span class="toc-number">1.2.2.</span> <span class="toc-text">Slow Call Rate Threshold</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CircuitBreaker-State"><span class="toc-number">1.3.</span> <span class="toc-text">CircuitBreaker State</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Half-Open-State"><span class="toc-number">1.3.1.</span> <span class="toc-text">Half Open State</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Disabled-and-Forced-Open-State"><span class="toc-number">1.3.2.</span> <span class="toc-text">Disabled and Forced Open State</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Other-Configs"><span class="toc-number">1.4.</span> <span class="toc-text">Other Configs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">1.5.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Resilience4j CircuitBreaker
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-12-09T14:11:48.000Z" itemprop="datePublished">2019-12-09</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="tag-link-link" href="/tags/resilience4j/" rel="tag">resilience4j</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Resilience4j-CircuitBreaker"><a href="#Resilience4j-CircuitBreaker" class="headerlink" title="Resilience4j CircuitBreaker"></a>Resilience4j CircuitBreaker</h1><p>resilience4j의 CircuitBreaker는 3개의 정상적인 state (CLOSED / OPEN / HALF_OPEN) 과 2개의 예외 state (DISABLED / FORCED_OPEN) 으로 구성된 finite state machine으로 구현되어있다.</p>
+<h2 id="Sliding-Window"><a href="#Sliding-Window" class="headerlink" title="Sliding Window"></a>Sliding Window</h2><p>호출의 결과를 Store / Aggregation하기 위해 Sliding Window 를 사용하고 있고 Count Based 와 Time Based, 2 가지 종류가 있다. default로는 Count Based를 사용하고 있다.</p>
+<h3 id="Count-Based-Sliding-Window"><a href="#Count-Based-Sliding-Window" class="headerlink" title="Count Based Sliding Window"></a>Count Based Sliding Window</h3><blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/resilience4j/resilience4j/blob/master/resilience4j-core/src/main/java/io/github/resilience4j/core/metrics/FixedSizeSlidingWindowMetrics.java">FixedSizeSlidingWindowMetrics.java</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Count Based</span></span><br><span class="line">CircuitBreakerConfig.custom()</span><br><span class="line">                    .slidingWindowType(SlidingWindowType.COUNT_BASED)</span><br><span class="line">                    .slidingWindowSize(N)</span><br><span class="line">                    .build();</span><br></pre></td></tr></table></figure>
+<p>Count Based Sliding Window는 N개의 요청을 저장하고 aggregation해서 Circuit의 상태를 판단한다. N개의 Measurements를 가지고 있고 요청이 올때마다 가장 오래된 Measurement를 Total Aggregation에서 빼고 초기화한다.<br>요청이 있을 때마다 Total Aggregation을 업데이트하기 때문에 Circuit의 Snapshot을 얻는 것은 O(1)의 시간이 걸리고, Circuit을 위해 필요한 메모리는 N개의 Measurements를 가지기 때문에 O(N)이다.</p>
+<h3 id="Time-Based-Sliding-Window"><a href="#Time-Based-Sliding-Window" class="headerlink" title="Time Based Sliding Window"></a>Time Based Sliding Window</h3><blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/resilience4j/resilience4j/blob/master/resilience4j-core/src/main/java/io/github/resilience4j/core/metrics/SlidingTimeWindowMetrics.java">SlidingTimeWindowMetrics.java</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Time Based</span></span><br><span class="line">CircuitBreakerConfig.custom()</span><br><span class="line">                    .slidingWindowType(SlidingWindowType.TIME_BASED)</span><br><span class="line">                    .slidingWindowSize(N)</span><br><span class="line">                    .build();</span><br></pre></td></tr></table></figure>
+<p>Time Based Sliding Window는 N개의 Partial Aggregation Circular Array로 구현되어있다. N초 동안의 요청을 저장하고 aggregation해서 Circuit의 상태를 판단한다. Partial Aggregation은 Bucket이라고 생각하면 되는데, 1초동안에 발생한 요청들에 대해 Aggregation해서 저장하고 있는 bucket이다.<br>요청의 결과를 각각 저장하는 것이 아닌 Partial Aggregation과 Total Aggregation에 저장한다. 시간이 지나 필요없어진 Partial Aggregation은 Total Aggregation에서 빼고 초기상태로 reset 된다.<br>Time Based Sliding Window도 Total Aggregation을 요청마다 업데이트하기 때문에 Circuit의 Snapshot을 얻는 것은 O(1)의 시간이 걸린다. 필요한 메모리는 N개의 Partial Aggregation과 1개의 Total Aggregation을 가지기 때문에 O(N) 이다.</p>
+<h2 id="Threshold-for-Open-State"><a href="#Threshold-for-Open-State" class="headerlink" title="Threshold for Open State"></a>Threshold for Open State</h2><p>resilience4j에서는 CircuitBreakerStateMachine가 OPEN State로 전이되기 위한 threshold를 2가지 제공한다. 요청이 Exception을 던지고 실패한 비율에 대한 Failure Rate Threshold, 지정한 Duration보다 오래 걸린 요청의 비율에 대한 Slow Call Rate Threshold가 있다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Minimum Number of Calls</span></span><br><span class="line">CircuitBreakerConfig.custom()</span><br><span class="line">                    .minimumNumberOfCalls(<span class="number">10</span>)</span><br><span class="line">                    .build();</span><br></pre></td></tr></table></figure><br>Failure Rate와 Slow Call Rate 모두 minimum number of calls보다 많은 요청이 있을 때부터 계산하기 시작한다. minimum number of calls보다 적은 요청만 들어왔다면 CircuitBreakerStateMachine은 OPEN 상태로 전이되지 않는다.<br>minimumNumberOfCalls를 지정할 때 주의할 점이 있다. 만약 COUNT_BASED Sliding Window를 사용하면서 Window Size를 minimumNumberOfCalls보다 작게 지정했다면 Window Size의 값이 minimumNumberOfCalls 값으로 사용된다.</p>
+<h3 id="Failure-Rate-Threshold"><a href="#Failure-Rate-Threshold" class="headerlink" title="Failure Rate Threshold"></a>Failure Rate Threshold</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Failure Rate Config</span></span><br><span class="line">CircuitBreakerConfig.custom()</span><br><span class="line">                    .failureRateThreshold(<span class="number">80</span>)</span><br><span class="line">                    .recordExceptions(Exception.class)</span><br><span class="line">                    .ignoreExceptions(IllegalArgumentException.class)</span><br><span class="line">                    .recordException(throwable -&gt; throwable <span class="keyword">instanceof</span> Exception)</span><br><span class="line">                    .ignoreException(throwable -&gt; throwable <span class="keyword">instanceof</span> IllegalArgumentException)</span><br><span class="line">                    .build();</span><br></pre></td></tr></table></figure>
+<p>말그대로 실패한 요청에 대한 threshold이다. 기본값은 50이고 Failure Rate가 전체 요청의 50%를 넘게 되면 CircuitBreakerStateMachine의 State가 CLOSED에서 OPEN으로 전이된다.<br>기본으로는 모든 Exception이 Failure로 기록되지만 여러 가지 config 값을 넣어줄 수 있다. </p>
+<ul>
+<li>recordExceptions : 실패로 기록할 Exception list를 넣어줄 수 있다. 이 list에 속한 Exception은 ignoreExceptions에 포함되지 않는다면 모두 Failure로 기록된다.</li>
+<li>ignoreExceptions : 실패나 성공으로 기록하지 않을 Exception list를 넣어줄 수 있다. 이 list에 속한 Exception은 Success도 아니고 Failure도 아닌 요청이 된다.</li>
+<li>recordException : 실패로 기록할 Exception을 판단하는 <code>Predicate&lt;Throwable&gt;</code>을 설정할 수 있다.</li>
+<li>ignoreException : 무시하고 넘어갈 Exception을 판단하는 <code>Predicate&lt;Throwable&gt;</code>을 설정할 수 있다.</li>
+</ul>
+<h3 id="Slow-Call-Rate-Threshold"><a href="#Slow-Call-Rate-Threshold" class="headerlink" title="Slow Call Rate Threshold"></a>Slow Call Rate Threshold</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Slow Call Rate Config</span></span><br><span class="line">CircuitBreakerConfig.custom()</span><br><span class="line">                    .slowCallDurationThreshold(Duration.ofSeconds(<span class="number">3</span>))</span><br><span class="line">                    .slowCallRateThreshold(<span class="number">80</span>)</span><br><span class="line">                    .build();</span><br></pre></td></tr></table></figure>
+<p>Slow Call에 대한 threshold 이다. slow call duration threshold를 설정할 수 있고 이 값보다 더 오래 걸린 요청에 대해서는 slow call로 기록하게 된다. 이렇게 기록된 slow call이 전체 요청에서 slow call rate threshold보다 높게 되면 CircuitBreakerStateMachine의 State가 OPEN으로 전이된다.<br>기본값으로는 slowCallDurationThreshold는 60초, slowCallRateThreshold는 100%로 되어있다. 그렇기 때문에 따로 설정을 넣어주지 않는다면 slow call에 의한 OPEN State 전이는 Disable된 것이나 마찬가지이다.</p>
+<h2 id="CircuitBreaker-State"><a href="#CircuitBreaker-State" class="headerlink" title="CircuitBreaker State"></a>CircuitBreaker State</h2><p>CircuitBreaker의 State는 AtomicReference에 저장된다. 또 State를 update할 때, atomic operation을 사용하고 Sliding Window에 요청을 기록하거나 SnapShot을 읽는 작업들이 모두 synchronized되어있기 때문에 CircuitBreaker는 thread safe하다. </p>
+<h3 id="Half-Open-State"><a href="#Half-Open-State" class="headerlink" title="Half Open State"></a>Half Open State</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Permitted Calls in Half Open State</span></span><br><span class="line">CircuitBreakerConfig.custom()</span><br><span class="line">                    .permittedNumberOfCallsInHalfOpenState(<span class="number">80</span>)</span><br><span class="line">                    .build();</span><br></pre></td></tr></table></figure>
+<p>resilience4j의 CircuitBreaker는 HALF_OPEN state일 때, 다시 CLOSED나 OPEN으로 전이하기 위한 테스트 요청의 수를 정할 수 있다. CLOSED state의 Sliding Window는 TIME_BASED와 COUNT_BASED 2가지 종류를 지원하는 것과는 달리 HALF_OPEN state의 Sliding Window는 COUNT_BASED 만 지원하고 있다.<br>permittedNumberOfCallsInHalfOpenState 값으로 HALF_OPEN state의 Sliding Window의 size를 지정할 수 있다. CLOSED state와 마찬가지로 minimumNumberOfCalls 값에 영향을 받으며 이때도 Window Size가 minimumNumberOfCalls보다 작으면 Window Size의 값을 minimumNumberOfCalls 값으로 사용한다.</p>
+<h3 id="Disabled-and-Forced-Open-State"><a href="#Disabled-and-Forced-Open-State" class="headerlink" title="Disabled and Forced Open State"></a>Disabled and Forced Open State</h3><p>DISABLED State는 모든 요청을 허용하는 상태이고 FORCED_OPEN은 모든 요청을 거부하는 상태이다. 이 두 상태 모두 아무런 CircuitBreaker Event를 발생시키지 않고, metrics 또한 기록하지 않는다. 또 DISABLED나 FORCED_OPEN state에서 다른 state로 전이되는 방법은 직접 상태 전이를 trigger하거나 CircuitBreaker를 reset해야 한다.</p>
+<h2 id="Other-Configs"><a href="#Other-Configs" class="headerlink" title="Other Configs"></a>Other Configs</h2><p>이외에도 writableStackTraceEnabled, automaticTransitionFromOpenToHalfOpenEnabled, waitIntervalFunctionInOpenState 등의 설정이 있다. </p>
+<ul>
+<li>writableStackTraceEnabled : Circuit Open으로 인해 CallNotPermittedException이 발생했을때 Stack Trace를 출력할지 정하는 boolean 값이다.</li>
+<li>waitIntervalFunctionInOpenState : 고정된 wait duration이 아닌 Circuit open 후에 CLOSED State로의 전이를 위해 시도한 횟수로 wait duration을 설정해주는 Function을 넣어줄 수 있다.</li>
+<li>automaticTransitionFromOpenToHalfOpenEnabled : OPEN State에서 HALF_OPEN State로의 전이는 이 설정이 false일 경우, 다음 요청이 들어왔을 때 전이된다. 하지만 이 설정이 true라면 waitDurationInOpenState 시간 이후에 바로 HALF_OPEN State로 전이된다.</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://resilience4j.readme.io/docs/circuitbreaker">https://resilience4j.readme.io/docs/circuitbreaker</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/resilience4j/resilience4j">https://github.com/resilience4j/resilience4j</a></li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Resilience4j-CircuitBreaker"><span class="toc-number">1.</span> <span class="toc-text">Resilience4j CircuitBreaker</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Sliding-Window"><span class="toc-number">1.1.</span> <span class="toc-text">Sliding Window</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Count-Based-Sliding-Window"><span class="toc-number">1.1.1.</span> <span class="toc-text">Count Based Sliding Window</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Time-Based-Sliding-Window"><span class="toc-number">1.1.2.</span> <span class="toc-text">Time Based Sliding Window</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Threshold-for-Open-State"><span class="toc-number">1.2.</span> <span class="toc-text">Threshold for Open State</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Failure-Rate-Threshold"><span class="toc-number">1.2.1.</span> <span class="toc-text">Failure Rate Threshold</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Slow-Call-Rate-Threshold"><span class="toc-number">1.2.2.</span> <span class="toc-text">Slow Call Rate Threshold</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CircuitBreaker-State"><span class="toc-number">1.3.</span> <span class="toc-text">CircuitBreaker State</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Half-Open-State"><span class="toc-number">1.3.1.</span> <span class="toc-text">Half Open State</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Disabled-and-Forced-Open-State"><span class="toc-number">1.3.2.</span> <span class="toc-text">Disabled and Forced Open State</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Other-Configs"><span class="toc-number">1.4.</span> <span class="toc-text">Other Configs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">1.5.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&text=Resilience4j CircuitBreaker"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&is_video=false&description=Resilience4j CircuitBreaker"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Resilience4j CircuitBreaker&body=Check out this article: https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&title=Resilience4j CircuitBreaker"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker/&name=Resilience4j CircuitBreaker&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

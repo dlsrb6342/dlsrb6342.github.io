@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="ITEM 43. Prefer method references to lambdasMethod ReferencesMethod references는 자바에서 함수 객체를 람다보다 간결하게 만드는 방법이다.12map.merge(key, 1, (count, incr) -&gt; count + incr);map.merge(key, 1, Integer::sum);첫번째">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Java 3rd ITEM 43">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="ITEM 43. Prefer method references to lambdasMethod ReferencesMethod references는 자바에서 함수 객체를 람다보다 간결하게 만드는 방법이다.12map.merge(key, 1, (count, incr) -&gt; count + incr);map.merge(key, 1, Integer::sum);첫번째">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-06-20T13:33:40.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.154Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="effective_java">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Effective Java 3rd ITEM 43</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/06/20/Effective-Java-3rd-ITEM-44/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/06/19/Effective-Java-3rd-ITEM-42/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&text=Effective Java 3rd ITEM 43"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&is_video=false&description=Effective Java 3rd ITEM 43"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 43&body=Check out this article: https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&name=Effective Java 3rd ITEM 43&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-43-Prefer-method-references-to-lambdas"><span class="toc-number">1.</span> <span class="toc-text">ITEM 43. Prefer method references to lambdas</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-References"><span class="toc-number">1.1.</span> <span class="toc-text">Method References</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-References-%EC%9C%A0%ED%98%95"><span class="toc-number">1.2.</span> <span class="toc-text">Method References 유형</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Effective Java 3rd ITEM 43
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-06-20T13:33:40.000Z" itemprop="datePublished">2019-06-20</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/effective-java/" rel="tag">effective_java</a>, <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="ITEM-43-Prefer-method-references-to-lambdas"><a href="#ITEM-43-Prefer-method-references-to-lambdas" class="headerlink" title="ITEM 43. Prefer method references to lambdas"></a>ITEM 43. Prefer method references to lambdas</h1><h2 id="Method-References"><a href="#Method-References" class="headerlink" title="Method References"></a>Method References</h2><p>Method references는 자바에서 함수 객체를 람다보다 간결하게 만드는 방법이다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map.merge(key, <span class="number">1</span>, (count, incr) -&gt; count + incr);</span><br><span class="line">map.merge(key, <span class="number">1</span>, Integer::sum);</span><br></pre></td></tr></table></figure><br>첫번째 줄을 method references를 이용해 두번째 줄로 간결하고 보기 좋게 줄일 수 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service.execute(GoshThisClassNameIsHumongous::action);</span><br><span class="line">service.execute(() -&gt; action());</span><br></pre></td></tr></table></figure>
+<p>하지만 위 코드처럼 람다가 더 간결할 때도 있고, 어떤 람다에서는 매개변수의 이름이 프로그래머에게 좋은 가이드가 되기도 하기 때문에 길이는 더 길지만 읽기 쉽고 유지보수가 쉬울 수 있다.</p>
+<h2 id="Method-References-유형"><a href="#Method-References-유형" class="headerlink" title="Method References 유형"></a>Method References 유형</h2><table>
+<thead>
+<tr>
+<th>메서드 참조 유형</th>
+<th>예</th>
+<th>같은 기능을 하는 람다</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정적</td>
+<td>Integer::parseInt</td>
+<td>str -&gt; Integer.parseInt(str)</td>
+</tr>
+<tr>
+<td>한정적(인스턴스)</td>
+<td>Instant.now()::isAfter</td>
+<td>Instant then = Instant.now(); t -&gt; then.isAfter(t)</td>
+</tr>
+<tr>
+<td>비한정적(인스턴스)</td>
+<td>String::toLowerCase</td>
+<td>str -&gt; str.toLowerCase()</td>
+</tr>
+<tr>
+<td>클래스 생성자</td>
+<td>TreeMap&lt;K,V&gt;::new</td>
+<td>() -&gt; new TreeMap&lt;K,V&gt;()</td>
+</tr>
+<tr>
+<td>배열 생성자</td>
+<td>int[]::new</td>
+<td>len -&gt; new int[len]</td>
+</tr>
+</tbody>
+</table>
+<p><br><br><strong><em>메서드 참조는 람다의 간단명료한 대안이 될 수 있다. 메서드 참조가 더 짧고 명확하다면 메서드 참조를 쓰고, 아니라면 람다를 쓰자.</em></strong></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-43-Prefer-method-references-to-lambdas"><span class="toc-number">1.</span> <span class="toc-text">ITEM 43. Prefer method references to lambdas</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-References"><span class="toc-number">1.1.</span> <span class="toc-text">Method References</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-References-%EC%9C%A0%ED%98%95"><span class="toc-number">1.2.</span> <span class="toc-text">Method References 유형</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&text=Effective Java 3rd ITEM 43"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&is_video=false&description=Effective Java 3rd ITEM 43"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 43&body=Check out this article: https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&title=Effective Java 3rd ITEM 43"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/06/20/Effective-Java-3rd-ITEM-43/&name=Effective Java 3rd ITEM 43&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

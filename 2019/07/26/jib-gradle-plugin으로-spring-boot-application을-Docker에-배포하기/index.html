@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Build container images for your Java applications.https:&#x2F;&#x2F;github.com&#x2F;GoogleContainerTools&#x2F;jib  spring boot application을 Docker에 배포해보기 위해 검색했을 때 가장 먼저 뜨는 링크는 spring.io에 실려있는 게시글이다. 이 게시글에서는 com.palant">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="Build container images for your Java applications.https:&#x2F;&#x2F;github.com&#x2F;GoogleContainerTools&#x2F;jib  spring boot application을 Docker에 배포해보기 위해 검색했을 때 가장 먼저 뜨는 링크는 spring.io에 실려있는 게시글이다. 이 게시글에서는 com.palant">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/dockerhub.png">
+<meta property="article:published_time" content="2019-07-26T07:39:46.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.268Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="gradle">
+<meta property="article:tag" content="spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/dockerhub.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/11/23/Reactor-Tools-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/07/20/spring-cloud-sleuth-%EC%98%88%EC%A0%9C%EB%A1%9C-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&text=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&is_video=false&description=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기&body=Check out this article: https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&name=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#jib-gradle-plugin"><span class="toc-number">1.</span> <span class="toc-text">jib-gradle-plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Image-build"><span class="toc-number">1.1.</span> <span class="toc-text">Image build</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Push-to-Docker-hub"><span class="toc-number">1.2.</span> <span class="toc-text">Push to Docker hub</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">1.3.</span> <span class="toc-text">Example</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%A0%95%EB%A6%AC"><span class="toc-number">2.</span> <span class="toc-text">정리</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-07-26T07:39:46.000Z" itemprop="datePublished">2019-07-26</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/gradle/" rel="tag">gradle</a>, <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="tag-link-link" href="/tags/spring/" rel="tag">spring</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>Build container images for your Java applications.<br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/GoogleContainerTools/jib">https://github.com/GoogleContainerTools/jib</a></p>
+</blockquote>
+<p>spring boot application을 Docker에 배포해보기 위해 검색했을 때 가장 먼저 뜨는 링크는 spring.io에 실려있는 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://spring.io/guides/gs/spring-boot-docker/">게시글</a>이다. 이 게시글에서는 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/palantir/gradle-docker">com.palantir.docker plugin</a>을 사용하고 Dockerfile을 작성하여 image build를 해주고 있다. 물론 착착 잘 되는 사람도 있었겠지만 내가 하는 환경에서는 잘 되지 않았다. Mac에서는 docker command의 PATH를 찾지 못하고 계속 오류를 내고 있었다. (참고 : <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/palantir/gradle-docker/issues/162">https://github.com/palantir/gradle-docker/issues/162</a>)<br>여러 시도를 하다가 포기하고 다른 plugin을 찾았는데 그것이 Google에서 만든 jib-gradle-plugin이다. 사용해본 결과, 정말 편하게 별다른 설정없이 docker에 application을 올릴 수 있었다. <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/GoogleContainerTools/jib">jib github repo</a>에 들어가보면 maven plugin도 있으니 maven을 사용하신다면 한번 확인해보기 바란다.</p>
+<h2 id="jib-gradle-plugin"><a href="#jib-gradle-plugin" class="headerlink" title="jib-gradle-plugin"></a>jib-gradle-plugin</h2><h3 id="Image-build"><a href="#Image-build" class="headerlink" title="Image build"></a>Image build</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">  id <span class="string">&#x27;com.google.cloud.tools.jib&#x27;</span> version <span class="string">&#x27;1.4.0&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>적용방법은 간단하다. build.gradle에 plugin으로 넣어주면 된다. 아무런 설정을 넣어주지 않는다면 image의 이름은 module 이름과 version 태그로 빌드된다. 물론 이름과 태깅 설정도 간단하다.<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">bootJar &#123;</span><br><span class="line">    baseName = <span class="string">&#x27;service-1&#x27;</span></span><br><span class="line">    version =  <span class="string">&#x27;0.1.0&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">jib &#123;</span><br><span class="line">    to &#123;</span><br><span class="line">      image = <span class="string">&quot;$&#123;bootJar.baseName&#125;:$&#123;bootJar.version&#125;&quot;</span></span><br><span class="line">      tags = [<span class="string">&#x27;latest&#x27;</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>난 bootJar를 통해 만들어지는 jar 파일과 이름을 같게 하기 위해 위와 같이 설정했다. 위 설정으로 이미지를 빌드하면 service-1:0.1.0과 service01:latest 두 개의 태그가 만들어진다. </p>
+<h3 id="Push-to-Docker-hub"><a href="#Push-to-Docker-hub" class="headerlink" title="Push to Docker hub"></a>Push to Docker hub</h3><p>Docker hub나 원하는 docker registry에 Push하는 것도 간단하다. jib github repo를 확인해보면 다양한 cloud service에 push하는 방법들이 나와있다. 난 Docker hub로 Push하도록 설정해보았다.<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ext.dockerId = <span class="string">&#x27;dlsrb6342&#x27;</span></span><br><span class="line"></span><br><span class="line">jib &#123;</span><br><span class="line">    to &#123;</span><br><span class="line">        image = <span class="string">&quot;$&#123;dockerId&#125;/$&#123;bootJar.baseName&#125;:$&#123;bootJar.version&#125;&quot;</span></span><br><span class="line">        username = <span class="string">&quot;USER_ID&quot;</span></span><br><span class="line">        password = <span class="string">&quot;PASSWORD&quot;</span></span><br><span class="line">        tags = [<span class="string">&#x27;latest&#x27;</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure><br>위의 이미지 및 태그 설정했던 부분에 docker hub ID를 넣어주고 username / password 값을 추가해주면 된다. 하지만 이 방법은 password가 다 노출될 수 있기 때문에 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/docker/docker-credential-helpers">docker-credential-helper</a>를 사용하기를 권장한다. docker-credential-helper를 사용하면 username과 password를 직접 적어두지 않아도 된다. 나는 OSX를 사용 중이기에 osxkeychain을 설치했다.<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">brew install go</span><br><span class="line"><span class="built_in">export</span> GOPATH=/usr/<span class="built_in">local</span>/Cellar/go/1.12.7</span><br><span class="line">go get github.com/docker/docker-credential-helpers</span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$GOPATH</span>/docker/docker-credentials-helpers</span><br><span class="line">make osxkeychain</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$&#123;PATH:+<span class="variable">$&#123;PATH&#125;</span>:&#125;</span>/usr/local/Cellar/go/1.12.7/src/github.com/docker/docker-credential-helpers/bin&quot;</span></span><br></pre></td></tr></table></figure><br>go lang도 설치되어있지 않아 다 설치해주었다. 다 설치해주고 나서 <code>docker-credential-osxkeychain list</code>를 입력해보면 잘 설정되었는지 볼 수 있을 것이다. </p>
+<p>여기서 하나 정리해야 하는것이 jib-gradle-plugin이 가지고있는 명령들이다. </p>
+<ul>
+<li>jib : Build your container image</li>
+<li>jibBuildTar : You can build and save your image to disk as a tarball</li>
+<li>jibDockerBuild : Jib can also build your image directly to a Docker daemon</li>
+</ul>
+<p>jibBuildTar는 이름 그래도 image를 tar 파일로 만들어주는 명령이다. jib과 jibDockerBuild는 하는 일은 거의 똑같다. 한 가지 다른 점은 jib은 docker hub와 같은 원격 registry에도 image를 push해준다는 점이다. jibDockerBuild를 사용하면 자신의 환경에 설치되어있는 docker command를 사용하기 때문에 local에만 image가 올라가게 된다.</p>
+<p>우린 remote registry에 올릴 것이기 때문에 jib 명령을 사용하면 된다.</p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>코드는 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dlsrb6342/blog-sample/tree/master/gradle-docker-example에">https://github.com/dlsrb6342/blog-sample/tree/master/gradle-docker-example에</a> 올려두었다. service1, service2 2개의 모듈이 있고 이를 jib-gradle-plugin으로 빌드하고 docker-compose를 사용해 두 모듈을 함께 실행해보는 예제이다.</p>
+<p>위에 얘기한 설정들은 각 모듈의 build.gradle에서 확인할 수 있고 root project의 build.gradle을 보면 편의를 위해 직접 task를 추가해었다.<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">task dockerDownAll(<span class="attr">type:</span>Exec) &#123;</span><br><span class="line">    commandLine <span class="string">&#x27;docker-compose&#x27;</span>, <span class="string">&#x27;down&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task dockerRunAll(<span class="attr">type:</span>Exec) &#123;</span><br><span class="line">    dependsOn dockerDownAll</span><br><span class="line">    dependsOn subprojects.jibDockerBuild</span><br><span class="line">    commandLine <span class="string">&#x27;docker-compose&#x27;</span>, <span class="string">&#x27;up&#x27;</span>, <span class="string">&#x27;-d&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>dockerRunAll : subprojects를 모두 이미지로 빌드하고 docker-compose를 사용해 실행시키는 명령</li>
+<li>dockerDownAll : 모든 모듈을 중지시키는 명령</li>
+</ul>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> ./gradlew dockerRunAll</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Task :dockerRunAll</span></span><br><span class="line">Creating network &quot;gradle-docker-example_default&quot; with the default driver</span><br><span class="line">Creating service-1 ... </span><br><span class="line">Creating service-2 ... </span><br><span class="line">Creating service-2 ... done</span><br><span class="line">BUILD SUCCESSFUL in 30s</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> docker ps</span></span><br><span class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</span><br><span class="line">3053876b03ee        service-2:latest    &quot;java -cp /app/resou…&quot;   10 seconds ago      Up 7 seconds        0.0.0.0:8082-&gt;8082/tcp   service-2</span><br><span class="line">983cb559414e        service-1:latest    &quot;java -cp /app/resou…&quot;   10 seconds ago      Up 7 seconds        0.0.0.0:8081-&gt;8081/tcp   service-1</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> curl http://127.0.0.1:8081/toService2</span></span><br><span class="line">&#123;&quot;service2&quot;:&quot;success&quot;,&quot;service1&quot;:&quot;toService2-passed&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>dockerRunAll 명령을 실행하게 되면 service1, service2 모듈이 실행되는 것을 볼 수 있다. </p>
+<p>Docker hub에 push하는 방법은 각 모듈에서 jib 명령을 실행해주면 된다.<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> ./gradlew :service1:jib</span></span><br><span class="line">...</span><br><span class="line">Built and pushed image as dlsrb6342/service-1:0.1.0, dlsrb6342/service-1</span><br><span class="line">Executing tasks:</span><br><span class="line">[==============================] 100.0% complete</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 17s</span><br><span class="line">3 actionable tasks: 2 executed, 1 up-to-date</span><br></pre></td></tr></table></figure><br><img src="/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/dockerhub.png" class title="docker hub"><br>push된 이미지는 Docker hub 페이지에서 확인할 수 있다.</p>
+<h2 id="정리"><a href="#정리" class="headerlink" title="정리"></a>정리</h2><p>com.palantir.docker plugin을 사용하면서 힘들었던 점이 많았다. Dockerfile을 작성하는 문법도 정확히 몰라서 계속 찾아봐야 했고 심지어 다 작성한 후에는 무슨 이유인지 모르게 docker command의 PATH를 찾지 못하는 이슈도 있었다. 이런 일이 있어서인지 jib-gradle-plugin은 정말 편하다는 느낌을 많이 받았다. java application을 docker image로 빌드할 때는 고민없이 이 plugin을 사용할 것 같다.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#jib-gradle-plugin"><span class="toc-number">1.</span> <span class="toc-text">jib-gradle-plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Image-build"><span class="toc-number">1.1.</span> <span class="toc-text">Image build</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Push-to-Docker-hub"><span class="toc-number">1.2.</span> <span class="toc-text">Push to Docker hub</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">1.3.</span> <span class="toc-text">Example</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%A0%95%EB%A6%AC"><span class="toc-number">2.</span> <span class="toc-text">정리</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&text=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&is_video=false&description=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기&body=Check out this article: https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&title=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/26/jib-gradle-plugin%EC%9C%BC%EB%A1%9C-spring-boot-application%EC%9D%84-Docker%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0/&name=jib-gradle-plugin으로 spring-boot application을 Docker에 배포하기&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

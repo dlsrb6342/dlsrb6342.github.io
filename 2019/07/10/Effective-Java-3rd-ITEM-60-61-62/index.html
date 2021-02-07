@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="ITEM 60. Avoid float and double if exact answers are requiredfloat와 double은 부동소수점 연산에 쓰이고 과학과 공학 계산용으로 설계되었다. 따라서 정확한 결과가 필요할 때는 적절치 않다. 따라서 올바른 값을 얻기 위해서는 BigDecimal이나 int 혹은 long을 사용해야 한다.  BigDecim">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Java 3rd ITEM 60 61 62">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="ITEM 60. Avoid float and double if exact answers are requiredfloat와 double은 부동소수점 연산에 쓰이고 과학과 공학 계산용으로 설계되었다. 따라서 정확한 결과가 필요할 때는 적절치 않다. 따라서 올바른 값을 얻기 위해서는 BigDecimal이나 int 혹은 long을 사용해야 한다.  BigDecim">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-07-10T13:44:50.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.174Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="effective_java">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Effective Java 3rd ITEM 60 61 62</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/07/13/Effective-Java-3rd-ITEM-63-64-65/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&text=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&is_video=false&description=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 60 61 62&body=Check out this article: https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&name=Effective Java 3rd ITEM 60 61 62&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-60-Avoid-float-and-double-if-exact-answers-are-required"><span class="toc-number">1.</span> <span class="toc-text">ITEM 60. Avoid float and double if exact answers are required</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BigDecimal"><span class="toc-number">1.0.1.</span> <span class="toc-text">BigDecimal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#int-%ED%98%B9%EC%9D%80-long"><span class="toc-number">1.0.2.</span> <span class="toc-text">int 혹은 long</span></a></li></ol></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-61-Prefer-primitive-types-to-boxed-primitives"><span class="toc-number">2.</span> <span class="toc-text">ITEM 61. Prefer primitive types to boxed primitives</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B8%B0%EB%B3%B8-%ED%83%80%EC%9E%85%EA%B3%BC-%EB%B0%95%EC%8B%B1%EB%90%9C-%EA%B8%B0%EB%B3%B8-%ED%83%80%EC%9E%85%EC%9D%98-%EC%B0%A8%EC%9D%B4"><span class="toc-number">2.0.1.</span> <span class="toc-text">기본 타입과 박싱된 기본 타입의 차이</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%A3%BC%EC%9D%98%ED%95%A0%EC%A0%90"><span class="toc-number">2.0.2.</span> <span class="toc-text">주의할점</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-62-Avoid-strings-where-other-types-are-more-appropriate"><span class="toc-number">3.</span> <span class="toc-text">ITEM 62. Avoid strings where other types are more appropriate</span></a></li>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Effective Java 3rd ITEM 60 61 62
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-07-10T13:44:50.000Z" itemprop="datePublished">2019-07-10</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/effective-java/" rel="tag">effective_java</a>, <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="ITEM-60-Avoid-float-and-double-if-exact-answers-are-required"><a href="#ITEM-60-Avoid-float-and-double-if-exact-answers-are-required" class="headerlink" title="ITEM 60. Avoid float and double if exact answers are required"></a>ITEM 60. Avoid float and double if exact answers are required</h1><p>float와 double은 부동소수점 연산에 쓰이고 과학과 공학 계산용으로 설계되었다. 따라서 정확한 결과가 필요할 때는 적절치 않다. 따라서 올바른 값을 얻기 위해서는 BigDecimal이나 int 혹은 long을 사용해야 한다. </p>
+<h3 id="BigDecimal"><a href="#BigDecimal" class="headerlink" title="BigDecimal"></a>BigDecimal</h3><p>BigDecimal은 정확한 값을 얻을 수 있지만 기본 타입보다 쓰기 불편하고 느리다. 그 대안으로 int 혹은 long을 쓸 수 있다. </p>
+<h3 id="int-혹은-long"><a href="#int-혹은-long" class="headerlink" title="int 혹은 long"></a>int 혹은 long</h3><p>int 혹은 long은 정확한 값을 얻을 수 있고 기본 타입이라 편하고 속도도 좋다. 하지만 값의 크기가 제한되고 소수점을 직접 관리해야 한다.<br><br></p>
+<h1 id="ITEM-61-Prefer-primitive-types-to-boxed-primitives"><a href="#ITEM-61-Prefer-primitive-types-to-boxed-primitives" class="headerlink" title="ITEM 61. Prefer primitive types to boxed primitives"></a>ITEM 61. Prefer primitive types to boxed primitives</h1><h3 id="기본-타입과-박싱된-기본-타입의-차이"><a href="#기본-타입과-박싱된-기본-타입의-차이" class="headerlink" title="기본 타입과 박싱된 기본 타입의 차이"></a>기본 타입과 박싱된 기본 타입의 차이</h3><ul>
+<li>기본 타입은 값만 / 박싱된 기본 타입은 값과 식별성을 갖는다.</li>
+<li>기본 타입의 값은 언제나 유효 / 박싱된 기본 타입은 null을 가질 수 있다.</li>
+<li>기본 타입이 박싱된 기본 타입보다 시간과 메모리 사용면에서 더 효율적이다.</li>
+</ul>
+<h3 id="주의할점"><a href="#주의할점" class="headerlink" title="주의할점"></a>주의할점</h3><ul>
+<li>박싱된 기본 타입에 == 연산자를 사용하면 오류가 일어난다.</li>
+<li>기본 타입과 박싱된 기본 타입을 혼용한 연산에서는 오토언박싱이 일어나 NPE가 발생할 수 있다.</li>
+<li>박싱과 언박싱이 반복해서 일어나면 성능이 굉장히 느려진다.</li>
+</ul>
+<p><br></p>
+<h1 id="ITEM-62-Avoid-strings-where-other-types-are-more-appropriate"><a href="#ITEM-62-Avoid-strings-where-other-types-are-more-appropriate" class="headerlink" title="ITEM 62. Avoid strings where other types are more appropriate"></a>ITEM 62. Avoid strings where other types are more appropriate</h1><ul>
+<li>문자열은 다른 값 타입(boolean / int / long …)을 대신하기에 적합하지 않다. </li>
+<li>문자열은 열거 타입을 대신하기에 적합하지 않다.</li>
+<li>문자열은 혼합 타입을 대신하기에 적합하지 않다. </li>
+<li>문자열은 권한을 표현하기에 적합하지 않다.</li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-60-Avoid-float-and-double-if-exact-answers-are-required"><span class="toc-number">1.</span> <span class="toc-text">ITEM 60. Avoid float and double if exact answers are required</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BigDecimal"><span class="toc-number">1.0.1.</span> <span class="toc-text">BigDecimal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#int-%ED%98%B9%EC%9D%80-long"><span class="toc-number">1.0.2.</span> <span class="toc-text">int 혹은 long</span></a></li></ol></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-61-Prefer-primitive-types-to-boxed-primitives"><span class="toc-number">2.</span> <span class="toc-text">ITEM 61. Prefer primitive types to boxed primitives</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EA%B8%B0%EB%B3%B8-%ED%83%80%EC%9E%85%EA%B3%BC-%EB%B0%95%EC%8B%B1%EB%90%9C-%EA%B8%B0%EB%B3%B8-%ED%83%80%EC%9E%85%EC%9D%98-%EC%B0%A8%EC%9D%B4"><span class="toc-number">2.0.1.</span> <span class="toc-text">기본 타입과 박싱된 기본 타입의 차이</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%A3%BC%EC%9D%98%ED%95%A0%EC%A0%90"><span class="toc-number">2.0.2.</span> <span class="toc-text">주의할점</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-62-Avoid-strings-where-other-types-are-more-appropriate"><span class="toc-number">3.</span> <span class="toc-text">ITEM 62. Avoid strings where other types are more appropriate</span></a></li>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&text=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&is_video=false&description=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 60 61 62&body=Check out this article: https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&title=Effective Java 3rd ITEM 60 61 62"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/&name=Effective Java 3rd ITEM 60 61 62&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

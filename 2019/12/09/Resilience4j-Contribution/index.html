@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Resilience4j Contributionresilience4j를 처음 알게 되고 사용한 지 6~7개월 정도 지났다. 그 당시 새로 진행하고 있던 프로젝트에 적용할 CircuitBreaker 구현체를 찾고 있었고 지난 프로젝트에 사용한 Hystrix가 maintenance 모드에 들어갔기에 resilience4j를 사용했다. Hystrix와의 차이점은">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Resilience4j Contribution (오픈소스 Contribution의 시작)">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="Resilience4j Contributionresilience4j를 처음 알게 되고 사용한 지 6~7개월 정도 지났다. 그 당시 새로 진행하고 있던 프로젝트에 적용할 CircuitBreaker 구현체를 찾고 있었고 지난 프로젝트에 사용한 Hystrix가 maintenance 모드에 들어갔기에 resilience4j를 사용했다. Hystrix와의 차이점은">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/spring-cloud-gateway.png">
+<meta property="og:image" content="https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/contribution.png">
+<meta property="article:published_time" content="2019-12-08T16:15:28.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.248Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="resilience4j">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/spring-cloud-gateway.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Resilience4j Contribution (오픈소스 Contribution의 시작)</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/12/09/Resilience4j-CircuitBreaker/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/11/23/Reactor-Tools-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&text=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&is_video=false&description=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Resilience4j Contribution (오픈소스 Contribution의 시작)&body=Check out this article: https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&name=Resilience4j Contribution (오픈소스 Contribution의 시작)&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Resilience4j-Contribution"><span class="toc-number">1.</span> <span class="toc-text">Resilience4j Contribution</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%8B%9C%EC%9E%91"><span class="toc-number">1.1.</span> <span class="toc-text">시작.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Cloud"><span class="toc-number">1.2.</span> <span class="toc-text">Spring Cloud.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%B4%88%EB%8C%80"><span class="toc-number">1.3.</span> <span class="toc-text">초대.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9D%B4%ED%9B%84"><span class="toc-number">1.4.</span> <span class="toc-text">이후.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-Source-Contributing"><span class="toc-number">1.5.</span> <span class="toc-text">Open Source Contributing.</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Resilience4j Contribution (오픈소스 Contribution의 시작)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-12-08T16:15:28.000Z" itemprop="datePublished">2019-12-09</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="tag-link-link" href="/tags/resilience4j/" rel="tag">resilience4j</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Resilience4j-Contribution"><a href="#Resilience4j-Contribution" class="headerlink" title="Resilience4j Contribution"></a>Resilience4j Contribution</h1><p>resilience4j를 처음 알게 되고 사용한 지 6~7개월 정도 지났다. 그 당시 새로 진행하고 있던 프로젝트에 적용할 CircuitBreaker 구현체를 찾고 있었고 지난 프로젝트에 사용한 Hystrix가 maintenance 모드에 들어갔기에 resilience4j를 사용했다. Hystrix와의 차이점은 지난 <a href="https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/#Netflix-Hystrix%EC%99%80-%EB%8B%A4%EB%A5%B8%EC%A0%90">포스트</a>에 작성해두었다. 그리고 7개월이 지난 지금은 resilience4j의 maintainer로 활동 중이다.</p>
+<h2 id="시작"><a href="#시작" class="headerlink" title="시작."></a>시작.</h2><p>resilience4j에 처음으로 한 contribution은 오타 수정이다. resilience4j를 사용해보기 위해 guide나 javadoc을 꼼꼼하게 다 읽어보았고, 그러다 보니 보이는 오타들이 있었다. 이슈를 남기기보다는 간단한 문서 수정이기에 바로 PR을 올렸었다.</p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/resilience4j/resilience4j/pull/482">https://github.com/resilience4j/resilience4j/pull/482</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/resilience4j/resilience4j/pull/535">https://github.com/resilience4j/resilience4j/pull/535</a></li>
+</ul>
+<p>작은 수정들이었지만 내가 Open Source Contribution에 흥미를 갖게 해주는 계기가 되었다. 이후에는 resilience4j에 올라오는 이슈들을 하나하나 다 읽어보고 혹시나 내가 기여할 수 있는 부분이 있는지 찾아보았다. 이 시기에 진행하고 있던 프로젝트에 resilience4j를 사용하고 있었으므로 사용 중에 불편했던 점이 생기기도 했고 여러 트러블 슈팅 경험도 생겨서 이슈에 코멘트를 달아주고 해결 방법에 대해 대화를 나누는 일들이 많아졌다.</p>
+<h2 id="Spring-Cloud"><a href="#Spring-Cloud" class="headerlink" title="Spring Cloud."></a>Spring Cloud.</h2><p>진행 중인 프로젝트가 spring-cloud의 library들을 많이 사용했었다. 이전 포스트들을 보면 알겠지만 spring-cloud-gateway / spring-cloud-sleuth / spring-cloud-config 등에 대한 글을 몇 개 작성했었고 spring-cloud-gateway에는 여러 커밋을 하기도 했다. 이 시기에 참 열심히 살았던 것 같다. 퇴근해서는 오픈 소스만 쳐다봤고 contribution 자체가 재밌었다.</p>
+<img src="/2019/12/09/Resilience4j-Contribution/spring-cloud-gateway.png" class title="spring-cloud-gateway contribution">
+<p>spring-cloud 이야기를 꺼낸 이유는 resilience4j에 첫 소스 코드에 대한 커밋은 spring-cloud 덕분이었기 때문이다. 이 당시(2019.06)에는 spring-cloud-circuitbreaker가 아직 incubating 중이었기 때문에 resilience4j를 spring-cloud와 사용하기에 불편함이 있었다. 이에 대해 똑같은 생각을 했던 사람이 이슈를 남겼고 코멘트로 트러블 슈팅을 했던 경험을 공유했다.</p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/resilience4j/resilience4j/issues/546">https://github.com/resilience4j/resilience4j/issues/546</a></li>
+</ul>
+<p>이에 resilience4j maintainer가 PR을 해줄 수 있냐고 물었고 난 정말 기쁜 마음으로 코드를 짜고 컨트리뷰팅을 했다. 이 이슈에 대한 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/resilience4j/resilience4j/pull/550">PR</a>은 7월 말에 처음 open 하였고 9월초에 머지되었다. 한 달이 넘는 기간, 46개의 코멘트를 주고받으며 리뷰를 받고 머지될 수 있었다. 중간중간 다른 이슈들에 대해서도 PR을 보냈고 여러 PR들이 머지되었다.</p>
+<h2 id="초대"><a href="#초대" class="headerlink" title="초대."></a>초대.</h2><p>여러 가지 이슈도 만들고 PR을 보내가며 커밋을 6개 정도 쌓아 갔을 때쯤, resilience4j maintainer로부터 slack에 초대를 받았다. resilience4j maintaining을 위한 채널이었다.</p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/resilience4j/resilience4j/pull/606#issuecomment-530386425">https://github.com/resilience4j/resilience4j/pull/606#issuecomment-530386425</a></li>
+</ul>
+<p>resilience4j maintainer로써 활동하게 된 것이다. 이 초대를 받고 resilience4j의 member가 된 것이 9월 중순이었으니 resilience4j에 관심을 갖고 여러 contribution을 한 지 3개월 만에 member가 될 수 있었다.</p>
+<img src="/2019/12/09/Resilience4j-Contribution/contribution.png" class title="Resilience4j Contribution">
+<h2 id="이후"><a href="#이후" class="headerlink" title="이후."></a>이후.</h2><p>resilience4j의 member가 되고 난 이후에는, 사실 commit은 많이 하지 못했다. 약간의 번아웃이 오기도 했고 여러 가지 개인 사정으로 인해 많은 시간을 쏟지 못했다. commit은 못했지만 그 대신 issue에 대해 답변을 준다거나 PR을 리뷰해주는 등 resilience4j가 더 성숙해지고 커질 수 있도록 노력했다. 6월 v0.16.0이던 프로젝트가 이젠 v1.2.0을 달고 릴리즈 되었고 spring-cloud-circuitbreaker에서 다른 CircuitBreaker 구현체들은 제외하고 resilience4j만을 지원하는 등, 정말 많은 성장을 한 것 같다. 처음 resilience4j를 만나고 간단한 <a href="https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/">포스트</a>를 작성했었는데 이제는 많은 설정들이 달라졌고 추가되었다. 이 부분에 대해서는 이어질 포스트들에서 다뤄볼 예정이고 앞으로의 버전 릴리즈 시에도 변경사항에 대한 포스트를 작성해볼 생각이다.</p>
+<h2 id="Open-Source-Contributing"><a href="#Open-Source-Contributing" class="headerlink" title="Open Source Contributing."></a>Open Source Contributing.</h2><p>나에게는 굉장히 신선한 경험이었다. spring-cloud-gateway에서 받은 PR 리뷰도 그렇고 resilience4j에서 받은 리뷰 모두 내가 생각하지 못했던 부분에 대한 리뷰를 받을 수 있었다. 라이브러리 개발자가 아닌 서비스 개발자로서 개발해왔기 때문에 내가 만든 코드를 사용하는 유저들에 대한 생각을 하지 못했다. 이런 내가 고려하지 못했던, 놓쳤던 부분들에 대한 리뷰들이 나를 더욱 Open Source Contribution에 빠져들게 했고 한층 더 성장시켜주었다. 직장에 다니고 대학 시절과는 다르게 개발이 일이 되면서 흥미나 의욕을 조금씩 잃어가는 느낌이 있었는데 Open Source Contribution을 하면서 대학 시절보다도 더 의욕이 넘치게 된 것 같다.<br>Open Source Contribution를 처음 시작하려고 하는 분들에게는 쉽게 생각하자고 말씀드리고 싶다. 나도 처음엔 얼굴에 철판을 깔았는지 이슈를 올리고 아무 PR이나 보내고 이슈에 코멘트를 달고 많이 나대고 다녔었다. 그러다 보니 contribution 자체가 어렵지 않게 느껴졌고 편하고 쉽게 생각할 수 있게 되었다. 또 시작하려고 할 때 뭐부터 해야 하지 라고 생각이 들 때는 문서를 꼼꼼하게 읽고 파악하는 것과 조금이라도 직접 사용해보는 것이 중요해 보인다. 그래야 PR도 자신 있게 올릴 수 있고 문제점이 눈에 들어오기도 하는 것 같다. 더 많은 사람들이 오픈 소스를 그저 사용해보는 것만이 아닌 여러 가지 방법으로 기여하면서 나와 비슷한 경험들을 했으면 좋겠다. </p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Resilience4j-Contribution"><span class="toc-number">1.</span> <span class="toc-text">Resilience4j Contribution</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%8B%9C%EC%9E%91"><span class="toc-number">1.1.</span> <span class="toc-text">시작.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Cloud"><span class="toc-number">1.2.</span> <span class="toc-text">Spring Cloud.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%B4%88%EB%8C%80"><span class="toc-number">1.3.</span> <span class="toc-text">초대.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EC%9D%B4%ED%9B%84"><span class="toc-number">1.4.</span> <span class="toc-text">이후.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-Source-Contributing"><span class="toc-number">1.5.</span> <span class="toc-text">Open Source Contributing.</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&text=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&is_video=false&description=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Resilience4j Contribution (오픈소스 Contribution의 시작)&body=Check out this article: https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&title=Resilience4j Contribution (오픈소스 Contribution의 시작)"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/12/09/Resilience4j-Contribution/&name=Resilience4j Contribution (오픈소스 Contribution의 시작)&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

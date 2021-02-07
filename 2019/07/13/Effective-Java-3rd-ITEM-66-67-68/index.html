@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="ITEM 66. Use native methods judiciouslyJNI(Java Native Interface)는 네이티브 메서드를 호출할 수 있게 해주는 기술이다. 네이티브 메서드란 C나 C++로 작성한 네이티브 프로그래밍 언어로 작성한 메서드를 말한다. 네이티브 메서드는 레지스트리같은 플랫폼 특화된 기능을 사용할때, 기존 라이브러리를 사용할때, 성">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Java 3rd ITEM 66 67 68">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="ITEM 66. Use native methods judiciouslyJNI(Java Native Interface)는 네이티브 메서드를 호출할 수 있게 해주는 기술이다. 네이티브 메서드란 C나 C++로 작성한 네이티브 프로그래밍 언어로 작성한 메서드를 말한다. 네이티브 메서드는 레지스트리같은 플랫폼 특화된 기능을 사용할때, 기존 라이브러리를 사용할때, 성">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-07-13T05:57:25.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.175Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="effective_java">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Effective Java 3rd ITEM 66 67 68</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/07/13/Gradle-Guide-1-Build-scan/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/07/13/Effective-Java-3rd-ITEM-63-64-65/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&text=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&is_video=false&description=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 66 67 68&body=Check out this article: https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&name=Effective Java 3rd ITEM 66 67 68&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-66-Use-native-methods-judiciously"><span class="toc-number">1.</span> <span class="toc-text">ITEM 66. Use native methods judiciously</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%8A%B9%ED%99%94%EB%90%9C-%EA%B8%B0%EB%8A%A5-%EA%B8%B0%EC%A1%B4-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%82%AC%EC%9A%A9"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. 플랫폼 특화된 기능 &#x2F; 기존 라이브러리 사용</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. 성능 개선</span></a></li></ol></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-67-Optimize-judiciously"><span class="toc-number">2.</span> <span class="toc-text">ITEM 67. Optimize judiciously</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EC%84%B1%EB%8A%A5"><span class="toc-number">2.0.1.</span> <span class="toc-text">아키텍처 - 성능</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-68-Adhere-to-generally-accepted-naming-conventions"><span class="toc-number">3.</span> <span class="toc-text">ITEM 68. Adhere to generally accepted naming conventions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%8C%A8%ED%82%A4%EC%A7%80"><span class="toc-number">3.0.1.</span> <span class="toc-text">패키지</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4"><span class="toc-number">3.0.2.</span> <span class="toc-text">클래스와 인터페이스</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%A9%94%EC%84%9C%EB%93%9C%EC%99%80-%ED%95%84%EB%93%9C-%EC%9D%B4%EB%A6%84"><span class="toc-number">3.0.3.</span> <span class="toc-text">메서드와 필드 이름</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%83%81%EC%88%98-%ED%95%84%EB%93%9C"><span class="toc-number">3.0.4.</span> <span class="toc-text">상수 필드</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%83%80%EC%9E%85-%EB%A7%A4%EA%B0%9C%EB%B3%80%EC%88%98"><span class="toc-number">3.0.5.</span> <span class="toc-text">타입 매개변수</span></a></li></ol></li>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Effective Java 3rd ITEM 66 67 68
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-07-13T05:57:25.000Z" itemprop="datePublished">2019-07-13</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/effective-java/" rel="tag">effective_java</a>, <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="ITEM-66-Use-native-methods-judiciously"><a href="#ITEM-66-Use-native-methods-judiciously" class="headerlink" title="ITEM 66. Use native methods judiciously"></a>ITEM 66. Use native methods judiciously</h1><p>JNI(Java Native Interface)는 네이티브 메서드를 호출할 수 있게 해주는 기술이다. 네이티브 메서드란 C나 C++로 작성한 네이티브 프로그래밍 언어로 작성한 메서드를 말한다. 네이티브 메서드는 레지스트리같은 플랫폼 특화된 기능을 사용할때, 기존 라이브러리를 사용할때, 성능 개선을 목적으로 사용할때, 이렇게 3가지 경우에 주로 사용한다.</p>
+<h3 id="1-플랫폼-특화된-기능-기존-라이브러리-사용"><a href="#1-플랫폼-특화된-기능-기존-라이브러리-사용" class="headerlink" title="1. 플랫폼 특화된 기능 / 기존 라이브러리 사용"></a>1. 플랫폼 특화된 기능 / 기존 라이브러리 사용</h3><p>자바가 발전하면서 OS같은 하부 플랫폼의 기능들을 점차 사용할 수 있게 되었다. java9에서 process API가 추가되어 OS process에 접근할 수 있게 되었다. 대체할만한 자바 라이브러리가 없을 경우엔 네이티브 메서드를 사용해야 한다.</p>
+<h3 id="2-성능-개선"><a href="#2-성능-개선" class="headerlink" title="2. 성능 개선"></a>2. 성능 개선</h3><p>성능 개선을 목적으로 사용하는건 권장하지 않는다. JVM의 발전으로 네이티브 구현보다도 빨라진 부분도 있다.<br><br><br>네이티브 메서드는 안전하지 않아 메모리 훼손 오류가 있을 수 있고 플랫폼을 많이 타서 이식성도 낮다. 디버깅도 어렵고 속도가 오히려 느려질 수 있다. 네이티브 메모리는 GC가 자동회수 하지 못하고 추적도 못해 위험할 수 있다. 네이티브 메서드와 자바 코드 사이의 접착 코드도 작성해야 하며, 넘나들때 비용도 추가된다. </p>
+<p><strong><em>=&gt; 네이티브 메서드를 사용하려거든 다시 한번 더 생각해보자.</em></strong><br><br></p>
+<h1 id="ITEM-67-Optimize-judiciously"><a href="#ITEM-67-Optimize-judiciously" class="headerlink" title="ITEM 67. Optimize judiciously"></a>ITEM 67. Optimize judiciously</h1><p>성능 최적화는 좋은 결과보다는 해로운 결과로 이어지기 쉽고 프로그램의 견고한 구조를 망가뜨릴 수 있다.<br><strong><em>=&gt; 빠른 프로그램보다는 좋은 프로그램을 작성하자.</em></strong></p>
+<h3 id="아키텍처-성능"><a href="#아키텍처-성능" class="headerlink" title="아키텍처 - 성능"></a>아키텍처 - 성능</h3><p>그렇다고 성능을 무시하라는 것이 아니다. 최적화는 나중에 해결할 수 있지만 아키텍처가 망가지면 선능을 제한할 수 있다. 또 성능을 위해 아키텍처 설계의 기본 틀을 변경하려다 보면 유지보수가 어려운 구조의 시스템이 만들어지기 쉽다. 따라서 아키텍처 설계 과정에서 성능을 반드시 염두해야 한다. </p>
+<ol>
+<li>성능을 제한하는 설계를 피하라.</li>
+<li>API를 설계할 때 성능에 주는 영향을 고려하라.</li>
+<li>신중한 설계로 멋진 구조를 갖춘 프로그램을 완성한 후에 성능 최적화를 생각하자.</li>
+<li>각각의 최적화 시도 전후로 성능을 측정하라.</li>
+</ol>
+<p><br></p>
+<h1 id="ITEM-68-Adhere-to-generally-accepted-naming-conventions"><a href="#ITEM-68-Adhere-to-generally-accepted-naming-conventions" class="headerlink" title="ITEM 68. Adhere to generally accepted naming conventions"></a>ITEM 68. Adhere to generally accepted naming conventions</h1><h3 id="패키지"><a href="#패키지" class="headerlink" title="패키지"></a>패키지</h3><ul>
+<li>각 요소를 점(.)으로 구분하여 계층적으로 짓는다.</li>
+<li>모두 소문자 알파벳 혹은 숫자로 이뤄진다.</li>
+<li>8자 이하의 짧은 단어로 한다.</li>
+</ul>
+<h3 id="클래스와-인터페이스"><a href="#클래스와-인터페이스" class="headerlink" title="클래스와 인터페이스"></a>클래스와 인터페이스</h3><ul>
+<li>하나 이상의 단어로 이뤈진다.</li>
+<li>각 단어는 대문자로 시작한다.</li>
+<li>통용되는 줄임말을 제외하고는 줄여 쓰지 않는다.</li>
+</ul>
+<h3 id="메서드와-필드-이름"><a href="#메서드와-필드-이름" class="headerlink" title="메서드와 필드 이름"></a>메서드와 필드 이름</h3><ul>
+<li>첫글자를 소문자로 쓴다.</li>
+<li>나머지 규칙은 클래스와 같다.</li>
+</ul>
+<h3 id="상수-필드"><a href="#상수-필드" class="headerlink" title="상수 필드"></a>상수 필드</h3><ul>
+<li>모두 대문자로 쓰며 단어 사이는 밑줄로 구분한다.</li>
+</ul>
+<h3 id="타입-매개변수"><a href="#타입-매개변수" class="headerlink" title="타입 매개변수"></a>타입 매개변수</h3><ul>
+<li>보통 한문자로 표현한다.</li>
+<li>T : Type / E : Element / K : Key / V : Value / X : eXception / R : Return</li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-66-Use-native-methods-judiciously"><span class="toc-number">1.</span> <span class="toc-text">ITEM 66. Use native methods judiciously</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%8A%B9%ED%99%94%EB%90%9C-%EA%B8%B0%EB%8A%A5-%EA%B8%B0%EC%A1%B4-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%82%AC%EC%9A%A9"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. 플랫폼 특화된 기능 &#x2F; 기존 라이브러리 사용</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. 성능 개선</span></a></li></ol></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-67-Optimize-judiciously"><span class="toc-number">2.</span> <span class="toc-text">ITEM 67. Optimize judiciously</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EC%84%B1%EB%8A%A5"><span class="toc-number">2.0.1.</span> <span class="toc-text">아키텍처 - 성능</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-68-Adhere-to-generally-accepted-naming-conventions"><span class="toc-number">3.</span> <span class="toc-text">ITEM 68. Adhere to generally accepted naming conventions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%8C%A8%ED%82%A4%EC%A7%80"><span class="toc-number">3.0.1.</span> <span class="toc-text">패키지</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4"><span class="toc-number">3.0.2.</span> <span class="toc-text">클래스와 인터페이스</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EB%A9%94%EC%84%9C%EB%93%9C%EC%99%80-%ED%95%84%EB%93%9C-%EC%9D%B4%EB%A6%84"><span class="toc-number">3.0.3.</span> <span class="toc-text">메서드와 필드 이름</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EC%83%81%EC%88%98-%ED%95%84%EB%93%9C"><span class="toc-number">3.0.4.</span> <span class="toc-text">상수 필드</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%83%80%EC%9E%85-%EB%A7%A4%EA%B0%9C%EB%B3%80%EC%88%98"><span class="toc-number">3.0.5.</span> <span class="toc-text">타입 매개변수</span></a></li></ol></li>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&text=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&is_video=false&description=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 66 67 68&body=Check out this article: https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&title=Effective Java 3rd ITEM 66 67 68"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/13/Effective-Java-3rd-ITEM-66-67-68/&name=Effective Java 3rd ITEM 66 67 68&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

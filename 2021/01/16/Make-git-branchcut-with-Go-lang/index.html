@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="https:&#x2F;&#x2F;github.com&#x2F;dlsrb6342&#x2F;git-branchcut 업무&#x2F;개인프로젝트&#x2F;오픈소스 등에서 git을 사용하다 보니 나도 모르는새에 프로젝트마다 브랜치가 엄청 쌓여있었다. 이것들을 한번에 싹 지워버리고 싶었는데 내가 원하는 옵션으로 없앨 수 있는 방법을 찾지 못해 직접 만들었다.  Git Add-Ongit addon으로 만들어서 git [">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Make git-branchcut with Go lang">
+<meta property="og:url" content="https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="https:&#x2F;&#x2F;github.com&#x2F;dlsrb6342&#x2F;git-branchcut 업무&#x2F;개인프로젝트&#x2F;오픈소스 등에서 git을 사용하다 보니 나도 모르는새에 프로젝트마다 브랜치가 엄청 쌓여있었다. 이것들을 한번에 싹 지워버리고 싶었는데 내가 원하는 옵션으로 없앨 수 있는 방법을 찾지 못해 직접 만들었다.  Git Add-Ongit addon으로 만들어서 git [">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/branches.jpg">
+<meta property="article:published_time" content="2021-01-16T07:29:02.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.228Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/branches.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Make git-branchcut with Go lang</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/01/30/Gradle-Multi-Project-with-Multiple-version-of-plugin/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/12/12/Resilience4j-RateLimiter/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&text=Make git-branchcut with Go lang"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&is_video=false&description=Make git-branchcut with Go lang"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Make git-branchcut with Go lang&body=Check out this article: https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&name=Make git-branchcut with Go lang&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-Add-On"><span class="toc-number">1.</span> <span class="toc-text">Git Add-On</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-lang"><span class="toc-number">2.</span> <span class="toc-text">Go lang</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cobra"><span class="toc-number">2.1.</span> <span class="toc-text">Cobra</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Goreleaser"><span class="toc-number">2.2.</span> <span class="toc-text">Goreleaser</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-branchcut"><span class="toc-number">3.</span> <span class="toc-text">git-branchcut</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Make git-branchcut with Go lang
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2021-01-16T07:29:02.000Z" itemprop="datePublished">2021-01-16</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/go/" rel="tag">go</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dlsrb6342/git-branchcut">https://github.com/dlsrb6342/git-branchcut</a></p>
+<p>업무/개인프로젝트/오픈소스 등에서 git을 사용하다 보니 나도 모르는새에 프로젝트마다 브랜치가 엄청 쌓여있었다. 이것들을 한번에 싹 지워버리고 싶었는데 내가 원하는 옵션으로 없앨 수 있는 방법을 찾지 못해 직접 만들었다.</p>
+<p><img src="branches.jpg" alt="로컬에 쌓인 브랜치들.." width="300"></p>
+<h2 id="Git-Add-On"><a href="#Git-Add-On" class="headerlink" title="Git Add-On"></a>Git Add-On</h2><p>git addon으로 만들어서 <code>git [name] [option]</code> 이런식으로 사용하고 싶었다. 하지만 어떻게 만들고 어떻게 배포해야 할지 막막했기에 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/stevemao/awesome-git-addons">awesome-git-addons</a>에서 다른 프로젝트들을 많이 참고했다. </p>
+<blockquote>
+<p>무언가 필요할때 <code>awesome</code>을 붙여 검색하면 친절히 정리해둔 repository가 많이 있다. :)</p>
+</blockquote>
+<h2 id="Go-lang"><a href="#Go-lang" class="headerlink" title="Go lang"></a>Go lang</h2><p>참고했던 프로젝트들은 python, shell script, js, go 등 다양한 언어로 작성되어있었다.<br>이중에 난 예전부터 관심있었던 Go lang을 선택했다 (<a target="_blank" rel="external nofollow noopener noreferrer" href="https://youtu.be/LJvEIjRBSDA">https://youtu.be/LJvEIjRBSDA</a> 이걸 보고 관심이 생겼다).</p>
+<p>지금 생각해보면 여러 언어 중에 Go lang을 선택한건 굉장히 좋은 선택이었다. 다른 언어들에 대해 많이 알아보지는 않았지만 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://cobra.dev/">cobra</a>와 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://goreleaser.com/">goreleaser</a>는 내겐 혁명이었다.</p>
+<h3 id="Cobra"><a href="#Cobra" class="headerlink" title="Cobra"></a>Cobra</h3><blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://cobra.dev/">https://cobra.dev/</a></p>
+</blockquote>
+<p>Cobra는 Go lang의 CLI Framework이다. Subcommand / Flag 등 정말 간단한 작업으로 내가 만들었나 싶을정도로 Modern한 CLI를 만들어준다. </p>
+<p>Kubernetes, Helm, Github CLI 등 굉장히 다양한 프로젝트에서 Cobra 를 사용 중이다. </p>
+<ul>
+<li>Subcommand의 Subcommand, 즉 Nested Subcommand도 지원한다.</li>
+<li>Global / Local / Cascading 등 Flag의 Scope을 지원한다.</li>
+<li>내가 command/flag마다 설명을 넣어둔다면 help를 자동생성해준다.</li>
+</ul>
+<p>예시 코드는 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dlsrb6342/git-branchcut">git-branchcut</a>을 봐도 되고 공식 홈페이지 설명이 자세히 되어있다.   </p>
+<p>내가 해본 CLI App들은 학부생 때 열심히 손으로 직접 만든 C언어 프로그램 밖에 없어서 그런지, Cobra를 써보고 많이 놀랐다. 물론 내가 Cobra를 깊게 사용해보진 않았지만 굉장히 강력한 프레임워크으로 보인다.  </p>
+<p>만약 Go로 CLI를 만든다고 한다면 사용하지 않을 이유가 없는 것 같다.</p>
+<h3 id="Goreleaser"><a href="#Goreleaser" class="headerlink" title="Goreleaser"></a>Goreleaser</h3><blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://goreleaser.com/">https://goreleaser.com/</a></p>
+</blockquote>
+<p>Goreleaser는 Go lang project의 release automation 툴이다. 모든 설정은 <code>.goreleaser.yml</code>에 저장된다. </p>
+<p>설치나 실행방법, 피쳐들은 너무 내용이 많아 다 설명할 수 없으니 Goreleaser 공식 홈페이지를 참고하면 될 것 같다.</p>
+<p>Cobra를 처음 썼을 때와 비슷한 느낌을 받았다. 너무 편하고 쉽다. 처음 <code>git-branchcut</code>을 만들 때 만들기는 하는데 다른 사람들이 사용할 수 있게 어떻게 배포할까 라는 고민을 많이 했다.<br>그 고민들이 무색하게 Goreleaser는 config 몇줄 수정/추가하고 <code>goreleaser</code>만 입력해주면 Release Note, Executable files, Homebrew-tap recipe를 모두 만들어준다. <code>git-branchcut</code>을 사용하고 싶어하는 사람들이 이젠 쉽게 Executable files를 받을 수 있고 혹은 Homebrew를 통해서 설치할 수 있게 된 것이다.</p>
+<h2 id="git-branchcut"><a href="#git-branchcut" class="headerlink" title="git-branchcut"></a>git-branchcut</h2><p>이제 내가 만든 git branchcut에 대해서 설명하려고 한다. 내가 원하는 기능은 딱 2가지였다. </p>
+<ol>
+<li>Outdated branch, 즉 새로운 커밋이 생긴지 오래된 브랜치 삭제.</li>
+<li>Pattern, Branch 이름의 pattern으로 삭제.</li>
+</ol>
+<p>그래서 git branchcut은 일단 두가지 옵션을 제공한다. 지극히 내 요구사항에 의해 만들었으니..ㅎㅎ<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt; git branchcut execute --help</span><br><span class="line">Cut branches</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  branchcut execute [flags]</span><br><span class="line"></span><br><span class="line">Flags:</span><br><span class="line">  -o, --day-offset int       Day offset. Branches that is committed before day offset would be deleted</span><br><span class="line">      --dry-run              Only print branch list that would be delete, without deleting it.</span><br><span class="line">      --force                Allow deleting the branch irrespective of its merged status.</span><br><span class="line">  -h, --help                 help for execute</span><br><span class="line">  -m, --main-branch string   Default branch name (default &quot;main&quot;)</span><br><span class="line">  -p, --pattern string       Pattern for branch name</span><br><span class="line"></span><br><span class="line">Global Flags:</span><br><span class="line">  -g, --executable-git-path string   The git executable to use (default &quot;git&quot;)</span><br></pre></td></tr></table></figure><br><code>--day-offset</code>으로 며칠 전 커밋된 브랜치를 살릴지 정할 수 있다. 예를 들어 <code>--day-offset 7</code>로 했다면 마지막 커밋이 7일 이내에 있는 브랜치만 살아남는다.<br><code>--pattern</code>으로 브랜치 이름의 Pattern을 지정할 수 있다. <code>--pattern &quot;feature/*&quot;</code>로 설정하면 “feature/“로 시작하는 브랜치들은 삭제된다. </p>
+<p>두가지 옵션 모두 입력하였다면 두 조건을 모두 만족하는 브랜치만 삭제된다.<br><br></p>
+<hr>
+<p><br><br>이 프로젝트를 하면서 Go lang을 처음 사용하였는데 책을 보면서 공부하거나 심도있게 사용한 것은 아니어도 어렵지 않은 언어라는 느낌을 받았다. 나중에 만약 언어의 선택이 자유롭고 새로운 것을 도전하고 싶다면 Go lang을 선택할 것 같다. </p>
+<p>이로써 내 로컬 git project들의 브랜치들은 깨끗하게 정리되었다! </p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-Add-On"><span class="toc-number">1.</span> <span class="toc-text">Git Add-On</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-lang"><span class="toc-number">2.</span> <span class="toc-text">Go lang</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cobra"><span class="toc-number">2.1.</span> <span class="toc-text">Cobra</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Goreleaser"><span class="toc-number">2.2.</span> <span class="toc-text">Goreleaser</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-branchcut"><span class="toc-number">3.</span> <span class="toc-text">git-branchcut</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&text=Make git-branchcut with Go lang"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&is_video=false&description=Make git-branchcut with Go lang"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Make git-branchcut with Go lang&body=Check out this article: https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&title=Make git-branchcut with Go lang"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2021/01/16/Make-git-branchcut-with-Go-lang/&name=Make git-branchcut with Go lang&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

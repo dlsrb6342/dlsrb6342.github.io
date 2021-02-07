@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="spring-cloud-gateway를 사용하면서 Dynamic Properties를 사용하고 싶어 spring-cloud-config도 같이 사용하기로 했다.   https:&#x2F;&#x2F;cloud.spring.io&#x2F;spring-cloud-config&#x2F;spring-cloud-config.html  Refresh 이슈설정된 PropertySource를 refresh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring-cloud-config Auto Refresh">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="spring-cloud-gateway를 사용하면서 Dynamic Properties를 사용하고 싶어 spring-cloud-config도 같이 사용하기로 했다.   https:&#x2F;&#x2F;cloud.spring.io&#x2F;spring-cloud-config&#x2F;spring-cloud-config.html  Refresh 이슈설정된 PropertySource를 refresh">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-06-28T13:11:26.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.271Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="spring">
+<meta property="article:tag" content="spring-cloud">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>spring-cloud-config Auto Refresh</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/06/28/Effective-Java-3rd-ITEM-51/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/06/27/Effective-Java-3rd-ITEM-50/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&text=spring-cloud-config Auto Refresh"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&is_video=false&description=spring-cloud-config Auto Refresh"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=spring-cloud-config Auto Refresh&body=Check out this article: https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&name=spring-cloud-config Auto Refresh&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Refresh-%EC%9D%B4%EC%8A%88"><span class="toc-number">1.</span> <span class="toc-text">Refresh 이슈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-spring-cloud-bus"><span class="toc-number">1.1.</span> <span class="toc-text">1. spring-cloud-bus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-ConfigClientWatch"><span class="toc-number">1.2.</span> <span class="toc-text">2. ConfigClientWatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Version"><span class="toc-number">1.3.</span> <span class="toc-text">3. Version?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-ConfigGitClientWatch"><span class="toc-number">1.4.</span> <span class="toc-text">4. ConfigGitClientWatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Issue-%EB%93%B1%EB%A1%9D-PR-%EA%B9%8C%EC%A7%80"><span class="toc-number">1.5.</span> <span class="toc-text">5. Issue 등록 &#x2F; PR 까지</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Source-Code"><span class="toc-number">2.</span> <span class="toc-text">Source Code</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        spring-cloud-config Auto Refresh
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-06-28T13:11:26.000Z" itemprop="datePublished">2019-06-28</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="tag-link-link" href="/tags/spring/" rel="tag">spring</a>, <a class="tag-link-link" href="/tags/spring-cloud/" rel="tag">spring-cloud</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>spring-cloud-gateway를 사용하면서 Dynamic Properties를 사용하고 싶어 spring-cloud-config도 같이 사용하기로 했다. </p>
+<blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://cloud.spring.io/spring-cloud-config/spring-cloud-config.html">https://cloud.spring.io/spring-cloud-config/spring-cloud-config.html</a></p>
+</blockquote>
+<h2 id="Refresh-이슈"><a href="#Refresh-이슈" class="headerlink" title="Refresh 이슈"></a>Refresh 이슈</h2><p>설정된 PropertySource를 refresh 해주려면 Actuator API를 하나하나 다 요청해주어야 한다. 여러 머신에 여러 인스턴스가 떠있는 상황이었기에 하나하나 다 찔러주는건 무리가 있었다.</p>
+<h3 id="1-spring-cloud-bus"><a href="#1-spring-cloud-bus" class="headerlink" title="1. spring-cloud-bus"></a>1. spring-cloud-bus</h3><p>이런 상황을 위해 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://cloud.spring.io/spring-cloud-bus/spring-cloud-bus.html">spring-cloud-bus</a>가 있다. mq를 써서 각 인스턴스마다 refresh 이벤트를 전달해준다.</p>
+<blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.baeldung.com/spring-cloud-bus">https://www.baeldung.com/spring-cloud-bus</a></p>
+</blockquote>
+<p><strong><em>하지만 spring-cloud-bus까지 도입하자니 운영해야할 것들이 너무 많이 늘어나게 된다.</em></strong></p>
+<h3 id="2-ConfigClientWatch"><a href="#2-ConfigClientWatch" class="headerlink" title="2. ConfigClientWatch"></a>2. ConfigClientWatch</h3><p>이전 프로젝트에서 Dynamic Properties를 위해 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://line.github.io/centraldogma/">CentralDogma</a>를 사용한 적이 있다. CentralDogma에는 Watcher 구현체가 있어서 spring-cloud-config-client에도 있지 않을까?하는 생각에 코드를 뒤져봤다.<br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/spring-cloud/spring-cloud-config/blob/master/spring-cloud-config-client/src/main/java/org/springframework/cloud/config/client/ConfigClientWatch.java">ConfigClientWatch</a>가 있었다! <code>spring.cloud.config.watch.enabled</code> 값을 true로 설정해주면 된다.</p>
+<p><strong><em>하지만…</em></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/spring-cloud/spring-cloud-config/blob/f24f02395153761236b102786a15450a48fe0b10/spring-cloud-config-client/src/main/java/org/springframework/cloud/config/client/ConfigClientWatch.java#L65-L72</span></span><br><span class="line">String newState = <span class="keyword">this</span>.environment.getProperty(<span class="string">&quot;config.client.state&quot;</span>);</span><br><span class="line">String oldState = ConfigClientStateHolder.getState();</span><br><span class="line"></span><br><span class="line"><span class="comment">// only refresh if state has changed</span></span><br><span class="line"><span class="keyword">if</span> (stateChanged(oldState, newState)) &#123;</span><br><span class="line">	ConfigClientStateHolder.setState(newState);</span><br><span class="line">	<span class="keyword">this</span>.refresher.refresh();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>내부 로직을 보면 ConfigClientWatch는 <code>config.client.state</code> 값을 보고 변경되었는지 체크한다. 하지만 이 state 값은 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.vaultproject.io/">Vault</a>를 Backend로 사용했을 때만 존재한다.</p>
+<p><strong><em>따라서 git을 Backend로 사용하고 있는 난 사용할 수 없었다.</em></strong></p>
+<h3 id="3-Version"><a href="#3-Version" class="headerlink" title="3. Version?"></a>3. Version?</h3><p>Git을 Backend로 썼을 때는 방법이 없을까 하고 열심히 코드를 뒤져봤다.<br>그러다 <code>config.client.state</code> 값은 config client가 config server로부터 받은 결과에서 꺼내서 직접 property에 put하고 있다는것을 발견했다.<br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/spring-cloud/spring-cloud-config/blob/master/spring-cloud-config-client/src/main/java/org/springframework/cloud/config/environment/Environment.java"><code>Environment</code></a> 클래스가 config server로부터 받은 결과이고 이 안에 state와 version이 있다.<br>그 결과를 받은 config client는 아래 코드와 같이 직접 property를 넣어주고 있다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/spring-cloud/spring-cloud-config/blob/79cd1100d1399cd880ea5c89577de1ed8f80396b/spring-cloud-config-client/src/main/java/org/springframework/cloud/config/client/ConfigServicePropertySourceLocator.java#L118-L119</span></span><br><span class="line">putValue(map, <span class="string">&quot;config.client.state&quot;</span>, result.getState());</span><br><span class="line">putValue(map, <span class="string">&quot;config.client.version&quot;</span>, result.getVersion());</span><br></pre></td></tr></table></figure><br>state뿐만 아니라 version을 넣어주고 있었고 테스트를 해보니 Git을 Backend로 사용했을때 config server가 이 값을 git HEAD의 checksum으로 전달해주고 있었다. </p>
+<p>따라서 <code>config.client.state</code> 값이 아닌 <code>config.client.version</code>을 확인한다면 똑같이 refresh의 효과를 볼 수 있을거라 생각이 들었다.</p>
+<h3 id="4-ConfigGitClientWatch"><a href="#4-ConfigGitClientWatch" class="headerlink" title="4. ConfigGitClientWatch"></a>4. ConfigGitClientWatch</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigGitClientWatch</span> <span class="keyword">implements</span> <span class="title">Closeable</span>, <span class="title">EnvironmentAware</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicBoolean running = <span class="keyword">new</span> AtomicBoolean(<span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicReference&lt;String&gt; version = <span class="keyword">new</span> AtomicReference&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ContextRefresher refresher;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ConfigServicePropertySourceLocator locator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Environment environment;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConfigGitClientWatch</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            ContextRefresher refresher, ConfigServicePropertySourceLocator locator)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.refresher = refresher;</span><br><span class="line">        <span class="keyword">this</span>.locator = locator;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setEnvironment</span><span class="params">(Environment environment)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.environment = environment;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        running.compareAndSet(<span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Scheduled(</span></span><br><span class="line"><span class="meta">            initialDelayString = &quot;$&#123;spring.cloud.config.watch.git.initialDelay:180000&#125;&quot;,</span></span><br><span class="line"><span class="meta">            fixedDelayString = &quot;$&#123;spring.cloud.config.watch.git.delay:500&#125;&quot;</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">watchConfigServer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (running.get()) &#123;</span><br><span class="line">            String newVersion = fetchNewVersion();</span><br><span class="line">            String oldVersion = version.get();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (versionChanged(oldVersion, newVersion)) &#123;</span><br><span class="line">                version.set(newVersion);</span><br><span class="line">                refresher.refresh();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">fetchNewVersion</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        CompositePropertySource propertySource = (CompositePropertySource) locator.locate(environment);</span><br><span class="line">        <span class="keyword">return</span> (String) propertySource.getProperty(<span class="string">&quot;config.client.version&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">versionChanged</span><span class="params">(String oldVersion, String newVersion)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> !hasText(oldVersion) &amp;&amp; hasText(newVersion)</span><br><span class="line">               || hasText(oldVersion) &amp;&amp; !oldVersion.equals(newVersion);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        running.compareAndSet(<span class="keyword">true</span>, <span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>직접 구현한 Git Backend spring-cloud-config-client Watch이다. commit을 할때마다 refresh가 잘 되는걸 확인했다. <code>Scheduled</code> annotation을 사용했기 때문에 Configuration이나 Application 클래스에 <code>EnableScheduling</code> annotation을 달아주어야 한다. </p>
+<h3 id="5-Issue-등록-PR-까지"><a href="#5-Issue-등록-PR-까지" class="headerlink" title="5. Issue 등록 / PR 까지"></a>5. Issue 등록 / PR 까지</h3><p>Default Backend를 git으로 사용하고 있는데 Git Watch가 없는게 이상하기도 하고 ConfigClientWatch에 대해 Vault만을 위한 것이라고도 명시하지 않아 Issue를 등록했다.</p>
+<blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/spring-cloud/spring-cloud-config/issues/1378">https://github.com/spring-cloud/spring-cloud-config/issues/1378</a></p>
+</blockquote>
+<p>이슈 등록 후에 별다른 피드백이 없길래 프로젝트를 위해 만들었던 ConfigGitClientWatch를 수정하여 PR까지 올렸다.</p>
+<blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/spring-cloud/spring-cloud-config/pull/1390">https://github.com/spring-cloud/spring-cloud-config/pull/1390</a></p>
+</blockquote>
+<p>하지만 이게 필요한지 아직 확실하지 않다는 코멘트와 함께 PR은 closed되었고 이슈에는 <code>waiting for votes</code> 라벨이 달렸다.<br>혹시 Git Watch가 필요하다 생각되신 분들은 이슈에 ThumbsUp 버튼 한번씩 클릭해주시면 감사하겠습니다 ㅎㅎ</p>
+<h2 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h2><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dlsrb6342/blog-sample/tree/master/spring-cloud-config-auto-refresh">https://github.com/dlsrb6342/blog-sample/tree/master/spring-cloud-config-auto-refresh</a><br>위 레포에 올려두었다. gradle 멀티모듈로 server/client를 만들고 config server는 같은 레포를 바라보고 있지만 config client가 label을 config로 지정하여 config branch를 볼 수 있게 하였다.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Refresh-%EC%9D%B4%EC%8A%88"><span class="toc-number">1.</span> <span class="toc-text">Refresh 이슈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-spring-cloud-bus"><span class="toc-number">1.1.</span> <span class="toc-text">1. spring-cloud-bus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-ConfigClientWatch"><span class="toc-number">1.2.</span> <span class="toc-text">2. ConfigClientWatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Version"><span class="toc-number">1.3.</span> <span class="toc-text">3. Version?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-ConfigGitClientWatch"><span class="toc-number">1.4.</span> <span class="toc-text">4. ConfigGitClientWatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Issue-%EB%93%B1%EB%A1%9D-PR-%EA%B9%8C%EC%A7%80"><span class="toc-number">1.5.</span> <span class="toc-text">5. Issue 등록 &#x2F; PR 까지</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Source-Code"><span class="toc-number">2.</span> <span class="toc-text">Source Code</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&text=spring-cloud-config Auto Refresh"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&is_video=false&description=spring-cloud-config Auto Refresh"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=spring-cloud-config Auto Refresh&body=Check out this article: https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&title=spring-cloud-config Auto Refresh"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/06/28/spring-cloud-config-Auto-Refresh/&name=spring-cloud-config Auto Refresh&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="이 글은 resilience4j 0.17.0 버전으로 작성되었다. 버전이 많이 올라감에 따라 많은 부분이 변경되었으므로 이 글보다는 아래 링크의 글들을 참고하는 것이 좋다.  https:&#x2F;&#x2F;dlsrb6342.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;Resilience4j-CircuitBreaker : resilience4j-circuitbreaker 1.2.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Resilience4j란">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="이 글은 resilience4j 0.17.0 버전으로 작성되었다. 버전이 많이 올라감에 따라 많은 부분이 변경되었으므로 이 글보다는 아래 링크의 글들을 참고하는 것이 좋다.  https:&#x2F;&#x2F;dlsrb6342.github.io&#x2F;2019&#x2F;12&#x2F;09&#x2F;Resilience4j-CircuitBreaker : resilience4j-circuitbreaker 1.2.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-06-02T15:44:41.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.263Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="resilience4j">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Resilience4j란</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/06/03/Effective-Java-3rd-ITEM-25/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/06/02/Effective-Java-3rd-ITEM-24/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&text=Resilience4j란"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&is_video=false&description=Resilience4j란"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Resilience4j란&body=Check out this article: https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&name=Resilience4j란&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Resilience4j"><span class="toc-number">1.</span> <span class="toc-text">Resilience4j</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-circuitbreaker"><span class="toc-number">1.1.</span> <span class="toc-text">resilience4j-circuitbreaker</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Netflix-Hystrix%EC%99%80-%EB%8B%A4%EB%A5%B8%EC%A0%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">Netflix Hystrix와 다른점</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CircuitBreakerRegistry"><span class="toc-number">1.1.2.</span> <span class="toc-text">CircuitBreakerRegistry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CircuitBreakerConfig"><span class="toc-number">1.1.3.</span> <span class="toc-text">CircuitBreakerConfig</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-ratelimiter"><span class="toc-number">1.2.</span> <span class="toc-text">resilience4j-ratelimiter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RateLimiterConfig"><span class="toc-number">1.2.1.</span> <span class="toc-text">RateLimiterConfig</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-bulkhead"><span class="toc-number">1.3.</span> <span class="toc-text">resilience4j-bulkhead</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BulkheadConfig"><span class="toc-number">1.3.1.</span> <span class="toc-text">BulkheadConfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Reconfiguration"><span class="toc-number">1.3.2.</span> <span class="toc-text">Dynamic Reconfiguration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-retry"><span class="toc-number">1.4.</span> <span class="toc-text">resilience4j-retry</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RetryConfig"><span class="toc-number">1.4.1.</span> <span class="toc-text">RetryConfig</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-cache"><span class="toc-number">1.5.</span> <span class="toc-text">resilience4j-cache</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-timelimiter"><span class="toc-number">1.6.</span> <span class="toc-text">resilience4j-timelimiter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TimeLimiterConfig"><span class="toc-number">1.6.1.</span> <span class="toc-text">TimeLimiterConfig</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Resilience4j란
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-06-02T15:44:41.000Z" itemprop="datePublished">2019-06-03</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="tag-link-link" href="/tags/resilience4j/" rel="tag">resilience4j</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><strong>이 글은 resilience4j 0.17.0 버전으로 작성되었다. 버전이 많이 올라감에 따라 많은 부분이 변경되었으므로 이 글보다는 아래 링크의 글들을 참고하는 것이 좋다.</strong></p>
+<ul>
+<li><strong><a href="https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker">https://dlsrb6342.github.io/2019/12/09/Resilience4j-CircuitBreaker</a> : resilience4j-circuitbreaker 1.2.0 버전에 맞춰 작성된 글이다.</strong></li>
+<li><strong><a href="https://dlsrb6342.github.io/2019/12/12/Resilience4j-RateLimiter">https://dlsrb6342.github.io/2019/12/12/Resilience4j-RateLimiter</a> : resilience4j-ratelimiter 1.2.0 버전에 맞춰 작성된 글이다.</strong></li>
+</ul>
+</blockquote>
+<h1 id="Resilience4j"><a href="#Resilience4j" class="headerlink" title="Resilience4j"></a>Resilience4j</h1><blockquote>
+<p>Resilience4j is a lightweight, easy-to-use fault tolerance library inspired by Netflix Hystrix. </p>
+</blockquote>
+<p>Resilience4j는 Hystrix로부터 영감을 받은 fault tolerance library다. 사용하기 가볍고 다른 라이브러리 의존성이 없어 좋다. Hystrix는 다른 dependency를 많이 가지고도 있고 archaius라는 큰 라이브러리를 사용했지만 Resilience4j는 Vavr를 제외한 다른 library dependancy가 없다.<br>Resilience4j에는 Circuit Breaker / Rate Limier / Bulkhead / Retry / Cache / Time Limiter 구현체들이 있다. 각각의 개념에 관해서는 아래 주제 별로 붙어있는 링크에서 확인할 수 있다. 이번 글에서는 코어 모듈에 대한 내용을 다루겠다.</p>
+<h2 id="resilience4j-circuitbreaker"><a href="#resilience4j-circuitbreaker" class="headerlink" title="resilience4j-circuitbreaker"></a>resilience4j-circuitbreaker</h2><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://martinfowler.com/bliki/CircuitBreaker.html">https://martinfowler.com/bliki/CircuitBreaker.html</a></p>
+<h3 id="Netflix-Hystrix와-다른점"><a href="#Netflix-Hystrix와-다른점" class="headerlink" title="Netflix Hystrix와 다른점"></a>Netflix Hystrix와 다른점</h3><blockquote>
+<p>Hystrix is no longer in active development, and is currently in maintenance mode.<br>For the cases where something like Hystrix makes sense, we intend to continue using Hystrix for existing applications, and to leverage open and active projects like resilience4j for new internal projects. We are beginning to recommend others do the same.</p>
+</blockquote>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/Netflix/Hystrix">Hystrix의 github</a>에 가보면 README에 위와 같은 내용이 적혀있다. 이제 더 이상 개발되지 않고 maintenance만 하겠다고 되어있고 resilience4j를 사용하기를 추천하고 있다. 그래서 Netflix에서 왜 resilience4j를 추천하는지 그 둘의 차이점을 찾아보았다. </p>
+<ul>
+<li><p>Hystrix는 외부 API 요청을 HystrixCommand로 wrapping해서 사용해야 한다. 하지만 Resilience4j는 functional interface, lambda, method reference를 위한 higher-order functions(decorator)를 제공한다.   </p>
+<blockquote>
+<p>어떤 decorator를 사용할지 혹은 사용하지 않을지 선택할 수 있게 된다.</p>
+</blockquote>
+</li>
+<li><p>Hystrix는 기본적으로 10개의 1-second window buckets에 실행 결과를 저장하고, bucket 하나가 끝나면 새로운 bucket을 만들고 기존 bucket은 없앤다.  Resilience4j는 Ring Bit Buffer에 결과를 저장하고 성공한 요청은 0 bit로 실패한 요청은 1 bit로 저장한다. Ring Bit Buffer는 설정으로 조절 가능한 fixed-size를 갖고, long[] array에 bits를 저장한다.  </p>
+<blockquote>
+<p>time winodw가 지났다고 실행 결과를 제거하지 않기 때문에 frequency가 낮든 높든 별다른 설정없이 CircuitBreaker를 이용할 수 있다.</p>
+</blockquote>
+</li>
+<li><p>Hystrix는 CircuitBreaker가 half-open 상태일때 Circuit을 close할지 결정할 딱 한번의 요청을 수행한다. 하지만 Resilience4j는 요청의 수행 횟수와 threshold 값을 설정할 수 있다.</p>
+</li>
+<li>RxJava operators를 지원한다.</li>
+</ul>
+<h3 id="CircuitBreakerRegistry"><a href="#CircuitBreakerRegistry" class="headerlink" title="CircuitBreakerRegistry"></a>CircuitBreakerRegistry</h3><ul>
+<li>CircuitBreaker instance를 만들고 없애는 관리를 할 수 있는 class이다.</li>
+<li>기본적으로 ConcurrentHashMap을 활용한 in-memory CircuitBreakerRegistry를 제공한다.</li>
+</ul>
+<h3 id="CircuitBreakerConfig"><a href="#CircuitBreakerConfig" class="headerlink" title="CircuitBreakerConfig"></a>CircuitBreakerConfig</h3><ul>
+<li><code>failureRateThreshold</code><ul>
+<li>CirucitBreaker를 열지 결정하는 failure rate threshold percentage 값. </li>
+<li>default는 50</li>
+</ul>
+</li>
+<li><code>waitDurationInOpenState</code> <ul>
+<li>CircuitBreaker를 open한 상태를 유지하는 지속 기간을 의미한다. 이 기간 이후에 half-open 상태가 된다. </li>
+<li>default는 60seconds</li>
+</ul>
+</li>
+<li><code>ringBufferSizeInHalfOpenState</code> <ul>
+<li>CircuitBreaker가 half-open 상태일때 RingBuffer의 사이즈. </li>
+<li>default는 10</li>
+</ul>
+</li>
+<li><code>ringBufferSizeInClosedState</code><ul>
+<li>CircuitBreaker가 closed 상태일때 RingBuffer의 사이즈.</li>
+<li>default는 100</li>
+</ul>
+</li>
+<li><code>recordExceptions</code><ul>
+<li>failure count를 증가시켜야하는 exception list</li>
+</ul>
+</li>
+<li><code>ignoreExceptions</code><ul>
+<li>failure count를 증가시키지 않고 무시하는 exception list</li>
+</ul>
+</li>
+<li><code>recordFailure</code><ul>
+<li>어떠한 경우에 Failure Count를 증가시킬지 Predicate를 정의해 CircuitBreaker에 대한 Exception Handler를 재정의하는 것이다. true를 return할 경우, failure count를 증가시키게 된다.</li>
+</ul>
+</li>
+<li><code>automaticTransitionFromOpenToHalfOpenEnabled</code><ul>
+<li>waitDurationInOpenState 기간 이후에 ScheduledExecutorSerivce를 이용해 half-open으로 자동으로 전환해줄지 결정하는 값. </li>
+<li>default는 false</li>
+</ul>
+</li>
+</ul>
+<h2 id="resilience4j-ratelimiter"><a href="#resilience4j-ratelimiter" class="headerlink" title="resilience4j-ratelimiter"></a>resilience4j-ratelimiter</h2><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://stripe.com/blog/rate-limiters">https://stripe.com/blog/rate-limiters</a><br>CircuitBreaker와 비슷한 API를 가지고 있다. In-memory RateLimiterRegistry를 제공하고 RateLimiterConfig로 설정할 수 있다.</p>
+<h3 id="RateLimiterConfig"><a href="#RateLimiterConfig" class="headerlink" title="RateLimiterConfig"></a>RateLimiterConfig</h3><ul>
+<li><code>timeoutDuration</code> <ul>
+<li>요청을 허용해주기 전까지 기다리는 기간을 의미한다. </li>
+<li>default는 5초</li>
+</ul>
+</li>
+<li><code>limitForPeriod</code><ul>
+<li>하나의 period(limitRefreshPeriod 값을 사용)마다 허용하는 limit count. </li>
+<li>default는 50</li>
+</ul>
+</li>
+<li><code>limitRefreshPeriod</code> <ul>
+<li>limit count(limitForPeriod 값을 사용)가 refresh되는 period duration. 1ns 이상이어야 한다.</li>
+<li>default는 500ns</li>
+</ul>
+</li>
+</ul>
+<h2 id="resilience4j-bulkhead"><a href="#resilience4j-bulkhead" class="headerlink" title="resilience4j-bulkhead"></a>resilience4j-bulkhead</h2><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://skife.org/architecture/fault-tolerance/2009/12/31/bulkheads.html">https://skife.org/architecture/fault-tolerance/2009/12/31/bulkheads.html</a><br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/Netflix/Hystrix/wiki/How-it-Works#Isolation">https://github.com/Netflix/Hystrix/wiki/How-it-Works#Isolation</a></p>
+<p>Hystrix와 다른 점은 Hystrix는 각각의 dependecy 마다 Thread pool을 주고 Thread Pool size만큼 execution을 제한하고 있다면 resilience4j-bulkhead는 maxConcurrentCalls을 semaphore의 permits 값으로 주고 semaphore를 이용해 제한한다.<br>다른 구현 모듈과 비슷하게 In-memory BulkheadRegistry를 제공한다.</p>
+<h3 id="BulkheadConfig"><a href="#BulkheadConfig" class="headerlink" title="BulkheadConfig"></a>BulkheadConfig</h3><ul>
+<li><code>maxConcurrentCalls</code> <ul>
+<li>Bulkhead가 허용할 최대 concurrent call의 값.</li>
+<li>default는 25</li>
+</ul>
+</li>
+<li><code>maxWaitTime</code> <ul>
+<li>Thread가 semaphore를 획득할 때까지 기다리는 timeout 값이다. 값이 0이면 semaphore를 획득할 수 없는 상황에는 기다리지 않고 바로 요청을 막게 된다. </li>
+<li>default는 0</li>
+</ul>
+</li>
+</ul>
+<h3 id="Dynamic-Reconfiguration"><a href="#Dynamic-Reconfiguration" class="headerlink" title="Dynamic Reconfiguration"></a>Dynamic Reconfiguration</h3><ul>
+<li>bulkhead 모듈은 다른 모듈과 다르게 changeConfig() 함수를 제공한다.</li>
+<li>하지만 이미 현재 semaphore를 얻기 위해 기다리고 있는 Thread에게는 바뀐 maxWaitTime이 적용되지 않는다.</li>
+</ul>
+<h2 id="resilience4j-retry"><a href="#resilience4j-retry" class="headerlink" title="resilience4j-retry"></a>resilience4j-retry</h2><p>Retry는 Registry는 따로 없고 <code>Retry retry = Retry.ofDefaults(&quot;id&quot;);</code> 이런 식으로 생성한다.</p>
+<h3 id="RetryConfig"><a href="#RetryConfig" class="headerlink" title="RetryConfig"></a>RetryConfig</h3><ul>
+<li><code>maxAttempts</code><ul>
+<li>최대 retry 시도 횟수. </li>
+<li>default는 3</li>
+</ul>
+</li>
+<li><code>waitDuration</code> <ul>
+<li>시도 실패 후 기다리는 시간을 의미하고 10ms 이상이어야 한다. </li>
+<li>default는 500ms.</li>
+</ul>
+</li>
+<li><code>retryOnResult</code> <ul>
+<li>response에 따라 재시도를 할지 말지 결정하는 Predicate.</li>
+</ul>
+</li>
+<li><code>retryOnException</code> <ul>
+<li>어떤 exception이 발생했을때 재시도를 할지 결정하는 Predicate.</li>
+</ul>
+</li>
+<li><code>retryExceptions</code> <ul>
+<li>재시도를 할 Exception 클래스 리스트.</li>
+</ul>
+</li>
+<li><code>ignoreExceptions</code> <ul>
+<li>재시도를 하지 않을 Exception 클래스 리스트.  </li>
+</ul>
+</li>
+</ul>
+<p>retryOnException과 retryExceptions, ignoreExceptions 이 3개를 조합해서 exceptionPredicate를 만들어 retry할 상황을 결정한다.</p>
+<h2 id="resilience4j-cache"><a href="#resilience4j-cache" class="headerlink" title="resilience4j-cache"></a>resilience4j-cache</h2><p>resilience4j-cache는 javax.cache.Cache를 wrapping해서 사용한다. javax.cache.Cache instance를 만들고 그 instance를 io.github.resilience4j.cache.Cache로 wrapping한다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create a CacheContext by wrapping a JCache instance.</span></span><br><span class="line">javax.cache.Cache&lt;String, String&gt; cacheInstance = Caching.getCache(<span class="string">&quot;cacheName&quot;</span>, String.class, String.class);</span><br><span class="line">Cache&lt;String, String&gt; cacheContext = Cache.of(cacheInstance);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Decorate your call to BackendService.doSomething()</span></span><br><span class="line">CheckedFunction1&lt;String, String&gt; cachedFunction = Decorators.ofCheckedSupplier(() -&gt; backendService.doSomething())</span><br><span class="line">    .withCache(cacheContext)</span><br><span class="line">    .decorate();</span><br><span class="line">String value = Try.of(() -&gt; cachedFunction.apply(<span class="string">&quot;cacheKey&quot;</span>)).get();</span><br></pre></td></tr></table></figure></p>
+<h2 id="resilience4j-timelimiter"><a href="#resilience4j-timelimiter" class="headerlink" title="resilience4j-timelimiter"></a>resilience4j-timelimiter</h2><p>TimeLimiter는 future supplier의 time limit을 정하는 API이다.</p>
+<h3 id="TimeLimiterConfig"><a href="#TimeLimiterConfig" class="headerlink" title="TimeLimiterConfig"></a>TimeLimiterConfig</h3><ul>
+<li><code>timeoutDuration</code> <ul>
+<li>실행 timeout 값이다. </li>
+<li>default는 1초</li>
+</ul>
+</li>
+<li><code>cancelRunningFuture</code> <ul>
+<li>timeout 발생 후 future를 취소할지 결정하는 boolean 값. </li>
+<li>default는 true</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Resilience4j"><span class="toc-number">1.</span> <span class="toc-text">Resilience4j</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-circuitbreaker"><span class="toc-number">1.1.</span> <span class="toc-text">resilience4j-circuitbreaker</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Netflix-Hystrix%EC%99%80-%EB%8B%A4%EB%A5%B8%EC%A0%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">Netflix Hystrix와 다른점</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CircuitBreakerRegistry"><span class="toc-number">1.1.2.</span> <span class="toc-text">CircuitBreakerRegistry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CircuitBreakerConfig"><span class="toc-number">1.1.3.</span> <span class="toc-text">CircuitBreakerConfig</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-ratelimiter"><span class="toc-number">1.2.</span> <span class="toc-text">resilience4j-ratelimiter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RateLimiterConfig"><span class="toc-number">1.2.1.</span> <span class="toc-text">RateLimiterConfig</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-bulkhead"><span class="toc-number">1.3.</span> <span class="toc-text">resilience4j-bulkhead</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BulkheadConfig"><span class="toc-number">1.3.1.</span> <span class="toc-text">BulkheadConfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-Reconfiguration"><span class="toc-number">1.3.2.</span> <span class="toc-text">Dynamic Reconfiguration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-retry"><span class="toc-number">1.4.</span> <span class="toc-text">resilience4j-retry</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RetryConfig"><span class="toc-number">1.4.1.</span> <span class="toc-text">RetryConfig</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-cache"><span class="toc-number">1.5.</span> <span class="toc-text">resilience4j-cache</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resilience4j-timelimiter"><span class="toc-number">1.6.</span> <span class="toc-text">resilience4j-timelimiter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TimeLimiterConfig"><span class="toc-number">1.6.1.</span> <span class="toc-text">TimeLimiterConfig</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&text=Resilience4j란"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&is_video=false&description=Resilience4j란"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Resilience4j란&body=Check out this article: https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&title=Resilience4j란"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/06/03/Resilience4j%EB%9E%80/&name=Resilience4j란&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

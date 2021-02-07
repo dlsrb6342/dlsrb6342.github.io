@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="ThreadLocal vs. InheritableThreadLocalThread.java 코드를 보면 아래와 같이 InheritableThreadLocal과 ThreadLocal이 따로 관리되는 것을 볼 수 있다. 둘의 차이가 무엇인지 확인해보자.123456789101112131415public class Thread implements Runnable &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThreadLocal vs. InheritableThreadLocal">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="ThreadLocal vs. InheritableThreadLocalThread.java 코드를 보면 아래와 같이 InheritableThreadLocal과 ThreadLocal이 따로 관리되는 것을 볼 수 있다. 둘의 차이가 무엇인지 확인해보자.123456789101112131415public class Thread implements Runnable &amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-07-15T13:13:44.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.266Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>ThreadLocal vs. InheritableThreadLocal</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/07/20/Gradle-Guide-3-Creating-Multi-project-Builds/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/07/14/Effective-Java-3rd-ITEM-69-70-71/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&text=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&is_video=false&description=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ThreadLocal vs. InheritableThreadLocal&body=Check out this article: https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&name=ThreadLocal vs. InheritableThreadLocal&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ThreadLocal-vs-InheritableThreadLocal"><span class="toc-number">1.</span> <span class="toc-text">ThreadLocal vs. InheritableThreadLocal</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal"><span class="toc-number">1.1.</span> <span class="toc-text">ThreadLocal</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%99%9C%EC%9A%A9"><span class="toc-number">1.1.1.</span> <span class="toc-text">활용</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InheritableThreadLocal"><span class="toc-number">1.2.</span> <span class="toc-text">InheritableThreadLocal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%B9%84%EA%B5%90-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-number">1.3.</span> <span class="toc-text">비교 테스트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InheritableThreadLocal-in-zipkin"><span class="toc-number">1.4.</span> <span class="toc-text">InheritableThreadLocal in zipkin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-number">1.5.</span> <span class="toc-text">결론</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        ThreadLocal vs. InheritableThreadLocal
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-07-15T13:13:44.000Z" itemprop="datePublished">2019-07-15</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="ThreadLocal-vs-InheritableThreadLocal"><a href="#ThreadLocal-vs-InheritableThreadLocal" class="headerlink" title="ThreadLocal vs. InheritableThreadLocal"></a>ThreadLocal vs. InheritableThreadLocal</h1><p>Thread.java 코드를 보면 아래와 같이 InheritableThreadLocal과 ThreadLocal이 따로 관리되는 것을 볼 수 있다. 둘의 차이가 무엇인지 확인해보자.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">     </span><br><span class="line">    <span class="comment">/* ThreadLocal values pertaining to this thread. This map is maintained</span></span><br><span class="line"><span class="comment">     * by the ThreadLocal class. */</span></span><br><span class="line">    ThreadLocal.ThreadLocalMap threadLocals = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * InheritableThreadLocal values pertaining to this thread. This map is</span></span><br><span class="line"><span class="comment">     * maintained by the InheritableThreadLocal class.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    ThreadLocal.ThreadLocalMap inheritableThreadLocals = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><p>ThreadLocal은 이름에서도 알 수 있듯이 한 Thread의 scope내의 local variable이다. 하나의 Thread 안에서는 같은 값을 공유해서 사용한다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 생성</span></span><br><span class="line">ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 저장</span></span><br><span class="line">threadLocal.set(<span class="string">&quot;test&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 사용</span></span><br><span class="line">threadLocal.get();</span><br></pre></td></tr></table></figure><br>사용법도 간단하다. 만들고 저장하고 쓰면 된다. </p>
+<h3 id="활용"><a href="#활용" class="headerlink" title="활용"></a>활용</h3><p>보통 하나의 Request에 대한 정보들을 저장할 때 사용된다. </p>
+<ul>
+<li>spring-security : 사용자 인증 정보를 ThreadLocal에 담아서 전달해준다. </li>
+<li>spring-web : RequestContextHolder가 요청의 Context를 ThreadLocal로 들고 있어 어디서든 꺼내쓸 수 있다.</li>
+<li>mdc : Logging에 사용될 attribute를 ThreadLocal로 들고 있다.</li>
+</ul>
+<p>ThreadLocal은 spring-web을 사용할때는 문제가 되지 않았다. 하지만 reactive programming(spring-webflux)을 사용하게 되고 하나의 요청이 여러 Thread에서 처리될 수 있게 되면서 ThreadLocal이 문제가 되었다.</p>
+<h2 id="InheritableThreadLocal"><a href="#InheritableThreadLocal" class="headerlink" title="InheritableThreadLocal"></a>InheritableThreadLocal</h2><p>이름에서도 알 수 있듯이 <strong>Inheritable</strong>한 ThreadLocal이다. InheritableThreadLocal은 부모 Thread에서 생성된 자식 Thread에 그 값이 전달된다. 사용법은 ThreadLocal과 똑같다.<br>자식 Thread에도 그 값이 전달되기 때문에 Thread를 왔다갔다 할수도 있는 reactive programming에서도 문제없이 사용 가능하다.</p>
+<h2 id="비교-테스트"><a href="#비교-테스트" class="headerlink" title="비교 테스트"></a>비교 테스트</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalTests</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line">	InheritableThreadLocal&lt;String&gt; inheritableThreadLocal = <span class="keyword">new</span> InheritableThreadLocal&lt;&gt;();</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">toAnotherThread</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">long</span> threadId = Thread.currentThread().getId();</span><br><span class="line">		threadLocal.set(<span class="string">&quot;test&quot;</span>);</span><br><span class="line">		inheritableThreadLocal.set(<span class="string">&quot;test&quot;</span>);</span><br><span class="line"></span><br><span class="line">		System.out.println(String.format(</span><br><span class="line">				<span class="string">&quot;Thread ID : %s / ThreadLocal : %s / InheritableThreadLocal : %s&quot;</span>,</span><br><span class="line">				threadId, threadLocal.get(), inheritableThreadLocal.get()));</span><br><span class="line"></span><br><span class="line">		Mono.fromRunnable(() -&gt; &#123;</span><br><span class="line">			<span class="keyword">long</span> anotherThreadId = Thread.currentThread().getId();</span><br><span class="line">			System.out.println(String.format(</span><br><span class="line">					<span class="string">&quot;Thread ID : %s / ThreadLocal : %s / InheritableThreadLocal : %s&quot;</span>,</span><br><span class="line">					anotherThreadId, threadLocal.get(), inheritableThreadLocal.get()));</span><br><span class="line">		&#125;).subscribeOn(Schedulers.elastic()).subscribe();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ThreadLocal과 InheritableThreadLocal을 비교하는 테스트이다. 부모 Thread에서 ThreadLocal과 InheritableThreadLocal를 모두 set해주고 자식 Thread에서 꺼내서 확인하는 코드이다. 다른 Thread를 실행하는 것은 reactor의 subscribeOn을 사용했다.<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Thread ID : 1 / ThreadLocal : test / InheritableThreadLocal : test</span><br><span class="line">Thread ID : 15 / ThreadLocal : null / InheritableThreadLocal : test</span><br></pre></td></tr></table></figure><br>결과는 이렇게 나온다. 부모 Thread에서는 두 값 모두 저장되어있지만 자식 Thread에서는 InheritableThreadLocal만 남아있다. </p>
+<h2 id="InheritableThreadLocal-in-zipkin"><a href="#InheritableThreadLocal-in-zipkin" class="headerlink" title="InheritableThreadLocal in zipkin"></a>InheritableThreadLocal in zipkin</h2><p>InheritableThreadLocal은 spring-cloud-sleuth와 zipkin을 사용하다가 발견했다. zipkin은 다른 Thread로 넘어가도 문제가 없게 하기 위해 현재 span의 정보를 CurrentTraceContext에 InheritableThreadLocal에 담아서 들고 있고 새로운 Scope가 시작될때 바꿔주고 있다. zipkin에서 MDC도 활용하고 있기 때문에 MDC에 넣어주는 부분은 Slf4jScopeDecorator를 참고하면 된다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CurrentTraceContext.java</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Default</span> <span class="keyword">extends</span> <span class="title">ThreadLocalCurrentTraceContext</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> InheritableThreadLocal&lt;TraceContext&gt; INHERITABLE = <span class="keyword">new</span> InheritableThreadLocal&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CurrentTraceContext <span class="title">inheritable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Default();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Default() &#123;</span><br><span class="line">      <span class="keyword">super</span>(<span class="keyword">new</span> Builder(), INHERITABLE);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ThreadLocalCurrentTraceContext.java</span></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Scope <span class="title">newScope</span><span class="params">(<span class="meta">@Nullable</span> TraceContext currentSpan)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> TraceContext previous = local.get();</span><br><span class="line">    local.set(currentSpan);</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalScope</span> <span class="keyword">implements</span> <span class="title">Scope</span> </span>&#123;</span><br><span class="line">      <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        local.set(previous);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    Scope result = <span class="keyword">new</span> ThreadLocalScope();</span><br><span class="line">    <span class="keyword">return</span> decorateScope(currentSpan, result);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h2 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h2><p>Reactive 환경에서는 InheritableThreadLocal을 사용하면 Servlet에서 RequestContext를 관리했던 것처럼 할 수 있을 것 같다. 하지만 reactor에서는 <code>subscriberContext()</code>를 제공하기 때문에 이것을 활용하는 것이 더 나을수도 있을 것 같다. 나중에 그 둘을 비교하는 글도 작성할 예정이다.<br>또 여러 글들을 보다보니 InheritableThreadLocal은 Servlet에서는 사용하면 좋지 않다는 얘기가 있다. 관련된 내용은 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://stackoverflow.com/questions/14498503/why-should-i-avoid-using-inheritablethreadlocal-in-servlets">https://stackoverflow.com/questions/14498503/why-should-i-avoid-using-inheritablethreadlocal-in-servlets</a> 이 링크에서 확인하면 된다.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ThreadLocal-vs-InheritableThreadLocal"><span class="toc-number">1.</span> <span class="toc-text">ThreadLocal vs. InheritableThreadLocal</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal"><span class="toc-number">1.1.</span> <span class="toc-text">ThreadLocal</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%ED%99%9C%EC%9A%A9"><span class="toc-number">1.1.1.</span> <span class="toc-text">활용</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InheritableThreadLocal"><span class="toc-number">1.2.</span> <span class="toc-text">InheritableThreadLocal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EB%B9%84%EA%B5%90-%ED%85%8C%EC%8A%A4%ED%8A%B8"><span class="toc-number">1.3.</span> <span class="toc-text">비교 테스트</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InheritableThreadLocal-in-zipkin"><span class="toc-number">1.4.</span> <span class="toc-text">InheritableThreadLocal in zipkin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EA%B2%B0%EB%A1%A0"><span class="toc-number">1.5.</span> <span class="toc-text">결론</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&text=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&is_video=false&description=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ThreadLocal vs. InheritableThreadLocal&body=Check out this article: https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&title=ThreadLocal vs. InheritableThreadLocal"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/15/ThreadLocal-vs-InheritableThreadLocal/&name=ThreadLocal vs. InheritableThreadLocal&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

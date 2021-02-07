@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+    
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-139343775-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'ododododo';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="ITEM 57. Minimize the scope of local variables지역변수의 범위를 최소화하면 코드 가독성과 유지보수성이 높아지고 오류 가능성은 낮아진다.  지역 변수가 가장 처음 쓰일 때 선언하자.  거의 모든 지역변수는 선언과 동시에 초기화하자.  메서드를 작게 유지하고 한 가지 기능에 집중하자.  ITEM 58. Prefer for-e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Java 3rd ITEM 57 58 59">
+<meta property="og:url" content="https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/index.html">
+<meta property="og:site_name" content="Ododododo">
+<meta property="og:description" content="ITEM 57. Minimize the scope of local variables지역변수의 범위를 최소화하면 코드 가독성과 유지보수성이 높아지고 오류 가능성은 낮아진다.  지역 변수가 가장 처음 쓰일 때 선언하자.  거의 모든 지역변수는 선언과 동시에 초기화하자.  메서드를 작게 유지하고 한 가지 기능에 집중하자.  ITEM 58. Prefer for-e">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-07-10T13:10:59.000Z">
+<meta property="article:modified_time" content="2021-01-30T08:34:59.170Z">
+<meta property="article:author" content="Ingyu Hwang">
+<meta property="article:tag" content="effective_java">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Effective Java 3rd ITEM 57 58 59</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">Ododododo</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/07/10/Effective-Java-3rd-ITEM-60-61-62/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover="$("#i-prev").toggle();" onmouseout="$("#i-prev").toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/07/02/Spring-Content-Logging/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$("#i-next").toggle();" onmouseout="$("#i-next").toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$("#i-top").toggle();" onmouseout="$("#i-top").toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$("#i-share").toggle();" onmouseout="$("#i-share").toggle();" onclick="$("#share").toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&text=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&is_video=false&description=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 57 58 59&body=Check out this article: https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&name=Effective Java 3rd ITEM 57 58 59&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-57-Minimize-the-scope-of-local-variables"><span class="toc-number">1.</span> <span class="toc-text">ITEM 57. Minimize the scope of local variables</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-58-Prefer-for-each-loops-to-traditional-for-loops"><span class="toc-number">2.</span> <span class="toc-text">ITEM 58. Prefer for-each loops to traditional for loops</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-59-Know-and-use-the-libraries"><span class="toc-number">3.</span> <span class="toc-text">ITEM 59. Know and use the libraries</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%91%9C%EC%A4%80-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%82%AC%EC%9A%A9%EC%9D%98-%EC%9D%B4%EC%A0%90"><span class="toc-number">3.1.</span> <span class="toc-text">표준 라이브러리 사용의 이점</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Effective Java 3rd ITEM 57 58 59
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Ododododo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-07-10T13:10:59.000Z" itemprop="datePublished">2019-07-10</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/effective-java/" rel="tag">effective_java</a>, <a class="tag-link-link" href="/tags/java/" rel="tag">java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="ITEM-57-Minimize-the-scope-of-local-variables"><a href="#ITEM-57-Minimize-the-scope-of-local-variables" class="headerlink" title="ITEM 57. Minimize the scope of local variables"></a>ITEM 57. Minimize the scope of local variables</h1><p>지역변수의 범위를 최소화하면 코드 가독성과 유지보수성이 높아지고 오류 가능성은 낮아진다.</p>
+<ul>
+<li>지역 변수가 가장 처음 쓰일 때 선언하자. </li>
+<li>거의 모든 지역변수는 선언과 동시에 초기화하자. </li>
+<li>메서드를 작게 유지하고 한 가지 기능에 집중하자.<br><br></li>
+</ul>
+<h1 id="ITEM-58-Prefer-for-each-loops-to-traditional-for-loops"><a href="#ITEM-58-Prefer-for-each-loops-to-traditional-for-loops" class="headerlink" title="ITEM 58. Prefer for-each loops to traditional for loops"></a>ITEM 58. Prefer for-each loops to traditional for loops</h1><p>Iterator를 사용한 for문이나 인덱스 변수로인한 for문은 코드를 지저분하게 하고 오류가 생길 가능성이 높아진다. 또 컬렉션 / 배열에 따라 코드 형태도 달라지는 문제점이 있다.</p>
+<p>for-each문을 사용하면 이 모든 문제를 해결할 수 있다. 또한 for-each문은 사람이 손으로 최적화한 것과 같은 성능을 낸다.<br><br></p>
+<h1 id="ITEM-59-Know-and-use-the-libraries"><a href="#ITEM-59-Know-and-use-the-libraries" class="headerlink" title="ITEM 59. Know and use the libraries"></a>ITEM 59. Know and use the libraries</h1><h2 id="표준-라이브러리-사용의-이점"><a href="#표준-라이브러리-사용의-이점" class="headerlink" title="표준 라이브러리 사용의 이점"></a>표준 라이브러리 사용의 이점</h2><ul>
+<li>그 코드를 작성한 전문가의 지식과 여러분보다 앞서 사용한 다른 프로그래머들의 경험을 활용할 수 있다. </li>
+<li>핵심적인 일과 크게 관련 없는 문제를 해결하느라 시간을 허비하지 않아도 된다.</li>
+<li>따로 노력하지 않아도 성능이 지속해서 개선된다.</li>
+<li>기능이 점점 많아진다.</li>
+<li>우리가 작성한 코드가 많은 사람에게 낯익은 코드가 된다.</li>
+</ul>
+<p>java.lang / java.util / java.io 는 잘 알아두자! 특히 java.util.stream / java.util.Collections / java.util.concurrent는 능숙하게 다룰 수 있게 하자.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-57-Minimize-the-scope-of-local-variables"><span class="toc-number">1.</span> <span class="toc-text">ITEM 57. Minimize the scope of local variables</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-58-Prefer-for-each-loops-to-traditional-for-loops"><span class="toc-number">2.</span> <span class="toc-text">ITEM 58. Prefer for-each loops to traditional for loops</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ITEM-59-Know-and-use-the-libraries"><span class="toc-number">3.</span> <span class="toc-text">ITEM 59. Know and use the libraries</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%ED%91%9C%EC%A4%80-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%82%AC%EC%9A%A9%EC%9D%98-%EC%9D%B4%EC%A0%90"><span class="toc-number">3.1.</span> <span class="toc-text">표준 라이브러리 사용의 이점</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.facebook.com/sharer.php?u=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/share?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&text=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.linkedin.com/shareArticle?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://pinterest.com/pin/create/bookmarklet/?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&is_video=false&description=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Effective Java 3rd ITEM 57 58 59&body=Check out this article: https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="https://getpocket.com/save?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://reddit.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.stumbleupon.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://digg.com/submit?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&title=Effective Java 3rd ITEM 57 58 59"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="external nofollow noopener noreferrer" href="http://www.tumblr.com/share/link?url=https://dlsrb6342.github.io/2019/07/10/Effective-Java-3rd-ITEM-57-58-59/&name=Effective Java 3rd ITEM 57 58 59&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$("#toc-footer").toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$("#share-footer").toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$("#nav-footer").toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Ingyu Hwang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/all-categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
